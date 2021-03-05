@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Sep 12, 2019 at 07:33 AM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.2
+-- Host: localhost
+-- Generation Time: Mar 05, 2021 at 01:13 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.3.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -92,7 +91,7 @@ CREATE TABLE `kamar` (
 --
 
 INSERT INTO `kamar` (`id_kamar`, `no_kamar`, `id_tipe_kamar`, `max_dewasa`, `max_anak`, `status`) VALUES
-(1, '100', '1', '2', '2', 'Tersedia'),
+(1, '100', '1', '2', '2', 'kotor'),
 (2, '101', '1', '2', '2', 'Tersedia'),
 (3, '102', '1', '2', '2', 'Tersedia'),
 (4, '103', '1', '2', '2', 'Tersedia');
@@ -148,7 +147,7 @@ INSERT INTO `meja` (`id_meja`, `kd_meja`, `status`) VALUES
 (3, 'A02', 'Kosong'),
 (4, 'A03', 'Kosong'),
 (5, 'A04', 'Kosong'),
-(7, 'A01', 'Kosong'),
+(7, 'A01', 'Penuh'),
 (8, 'A05', 'Kosong'),
 (9, 'A06', 'Kosong'),
 (10, 'A07', 'Kosong');
@@ -222,6 +221,13 @@ CREATE TABLE `pesanan` (
   `status` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `pesanan`
+--
+
+INSERT INTO `pesanan` (`id_pesanan`, `id_transaksi_kamar`, `id_meja`, `total`, `waktu`, `tanggal`, `lokasi_pemesanan`, `status`) VALUES
+('ID60579223', 'ID294988', 7, '85000', '18:13', '2021-03-05', 'Dari Resto', 'selesai');
+
 -- --------------------------------------------------------
 
 --
@@ -229,12 +235,20 @@ CREATE TABLE `pesanan` (
 --
 
 CREATE TABLE `pesanan_detail` (
-  `id_pesanan_detail` int(11) NOT NULL,
+  `id_pesanan_detail` int(11) UNSIGNED NOT NULL,
   `id_pesanan` varchar(11) NOT NULL,
   `id_menu` int(11) NOT NULL,
   `qty` int(10) NOT NULL,
   `total_harga` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pesanan_detail`
+--
+
+INSERT INTO `pesanan_detail` (`id_pesanan_detail`, `id_pesanan`, `id_menu`, `qty`, `total_harga`) VALUES
+(20, 'ddgfhjk', 1, 1, '1212'),
+(23, 'ID60579223', 6, 1, '85000');
 
 -- --------------------------------------------------------
 
@@ -256,6 +270,13 @@ CREATE TABLE `tamu` (
   `provinsi` char(50) NOT NULL,
   `no_telp` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tamu`
+--
+
+INSERT INTO `tamu` (`id_tamu`, `prefix`, `nama_depan`, `nama_belakang`, `tipe_identitas`, `no_identitas`, `warga_negara`, `jalan`, `no_jalan`, `kabupaten`, `provinsi`, `no_telp`) VALUES
+('ID27538', 'Mr', 'Mirza', 'Saputra', 'KTP', '3546217632', 'Indonesia', 'Patung Raya', '10', 'Banyuwangi', 'Jawa Timur', '0897487387382');
 
 -- --------------------------------------------------------
 
@@ -297,10 +318,18 @@ CREATE TABLE `transaksi_kamar` (
   `waktu_checkout` varchar(20) NOT NULL,
   `total_biaya_kamar` varchar(20) NOT NULL,
   `bayar` varchar(30) NOT NULL,
+  `diskon` int(11) NOT NULL,
   `deposit` varchar(20) NOT NULL,
   `surcharge` varchar(30) NOT NULL,
   `status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `transaksi_kamar`
+--
+
+INSERT INTO `transaksi_kamar` (`id_transaksi_kamar`, `no_invoice`, `tanggal`, `id_tamu`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`, `tgl_checkin`, `waktu_checkin`, `tgl_checkout`, `waktu_checkout`, `total_biaya_kamar`, `bayar`, `diskon`, `deposit`, `surcharge`, `status`) VALUES
+('ID294988', 'INV-25301950-87', '2021-03-05', 'ID27538', 1, '2', '1', '2021-03-05', '09:12', '2021-03-07', '12:00', '300000', '324000', 40000, '100000', '100000', 'check out');
 
 -- --------------------------------------------------------
 
@@ -507,7 +536,7 @@ ALTER TABLE `perusahaan`
 -- AUTO_INCREMENT for table `pesanan_detail`
 --
 ALTER TABLE `pesanan_detail`
-  MODIFY `id_pesanan_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_pesanan_detail` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `tipe_kamar`
