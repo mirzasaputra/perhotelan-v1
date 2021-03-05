@@ -170,7 +170,7 @@ if($qty == 0){
                                 <div class="row">
                                     <div class="col-5">
                                         <div class="input-group">
-                                            <input type="number" min="0" max="100" id="diskon" class="form-control" value="0">
+                                            <input type="number" min="0" max="100" id="diskon" class="form-control" value="0" autocomplete="off">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text">%</div>
                                             </div>
@@ -216,7 +216,12 @@ if($qty == 0){
                             <th class='border-0'></th>
                             <th colspan="2">Pay</th>
                             <input type="hidden" name="total" id="grandTotal" value="<?=$total + $i['surcharge'] + ($total * 0.21) - $i['deposit'];?>">
-                            <th><input type="text" name="bayar" class="form-control" placeholder="Bayar..." required></th>
+                            <th><input type="text" name="bayar" id="pay" class="form-control" placeholder="Bayar..." required autocomplete="off"></th>
+                        </tr>
+                        <tr align="center">
+                            <th class='border-0'></th>
+                            <th colspan="2">Refund</th>
+                            <th class="text-success" id="refund">Rp. 0</th>
                         </tr>
                         <?php endif;?>
 
@@ -287,22 +292,29 @@ if($qty == 0){
         })
 
         $('#diskon').keyup(function(){
-            let total = $('#subtotal').val(), diskon = $(this).val(), surcharge = $('#surchargeVal').val(), taxService = $('#taxServiceVal').val(), deposit = $('#deposit').val();
+            diskon()
+        })
 
-            total = parseInt(total) + parseInt(surcharge);
+        $('#diskon').change(function(){
+            diskon()
+        })
 
-            let jumlah = (total * diskon) / 100;
-            $('#diskonVal').val(jumlah);
+        $('#pay').keyup(function(){
+            let total = $('#grandTotal').val(), pay = $(this).val();
 
-            
-            //set total
-            total = parseInt(total) - parseInt(jumlah);
-            $('#totalView').html('Rp. '+ rupiah(total));
-             
-            //set grand total
-            total = parseInt(total) + parseInt(taxService) - parseInt(deposit);
-            $('.grandTotal').html('Rp. '+ rupiah(total));
-            $('#grandTotal').val(total);
+            if(parseInt(total) - parseInt(pay) > 0){
+                $('#refund').attr('class', 'text-danger');
+            } else {
+                $('#refund').attr('class', 'text-success');
+            }
+
+            total = parseInt(pay) - parseInt(total);
+
+            if(pay == ''){
+                $('#refund').html('Rp. 0');
+            } else {
+                $('#refund').html('Rp. '+ rupiah(total));
+            }
         })
 
         $('#formChekOut').submit(function(e){
@@ -348,5 +360,24 @@ if($qty == 0){
         }
 
         return rupiah;
+    }
+
+    function diskon(){
+        let total = $('#subtotal').val(), diskon = $('#diskon').val(), surcharge = $('#surchargeVal').val(), taxService = $('#taxServiceVal').val(), deposit = $('#deposit').val();
+
+        total = parseInt(total) + parseInt(surcharge);
+
+        let jumlah = (total * diskon) / 100;
+        $('#diskonVal').val(jumlah);
+
+        
+        //set total
+        total = parseInt(total) - parseInt(jumlah);
+        $('#totalView').html('Rp. '+ rupiah(total));
+            
+        //set grand total
+        total = parseInt(total) + parseInt(taxService) - parseInt(deposit);
+        $('.grandTotal').html('Rp. '+ rupiah(total));
+        $('#grandTotal').val(total);
     }
 </script>

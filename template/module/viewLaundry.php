@@ -73,7 +73,7 @@ $data = mysqli_fetch_array($query);
                     <tr>
                         <th colspan="4" class="border-0"></th>
                         <th colspan="2">Refund</th>
-                        <th>Rp. <?=number_format($a['bayar'] - $i['total'], 0, ',', '.');?>,-</th>
+                        <th>Rp. <?=number_format($a['bayar'] - ($i['total'] + ($i['total'] * 0.21)), 0, ',', '.');?>,-</th>
                     </tr>
                 <?php endif;?>
             </tfooter>

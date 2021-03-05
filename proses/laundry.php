@@ -37,7 +37,7 @@ if($_GET['act'] == "input"){
 
     $total = $harga * $qty;
 
-    $query = mysqli_query($conn, "INSERT INTO laundry_detail VALUES('', '$id_laundry', '$id_jenis_laundry', '$article', '$qty', '$total')");
+    $query = mysqli_query($conn, "INSERT INTO laundry_detail VALUES(null, '$id_laundry', '$id_jenis_laundry', '$article', '$qty', '$total')");
     if($query){
         $data['hasil'] = true;
         $data['pesan'] = 'success';
@@ -91,7 +91,7 @@ if($_GET['act'] == 'pembayaran'){
 
     if($bayar >= $total){
        
-        $query = mysqli_query($conn, "INSERT INTO transaksi_laundry VALUES('', '$id', '$waktu', '$tgl', '$total', '$bayar')");
+        $query = mysqli_query($conn, "INSERT INTO transaksi_laundry VALUES(null, '$id', '$waktu', '$tgl', '$total', '$bayar')");
         
         if($query){
             mysqli_query($conn, "UPDATE laundry SET status='selesai' WHERE id_laundry='$id'");
