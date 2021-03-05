@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ $1.php
+</IfModule>
+
+ErrorDocument 404 /apk_perhotelan/error/index.php?not_found
+ErrorDocument 403 /apk_perhotelan/error/index.php?forbiden
+ErrorDocument 402 /apk_perhotelan/error
+ErrorDocument 500 /apk_perhotelan/error/index.php?error_server
+ErrorDocument 501 /apk_perhotelan/error
+ErrorDocument 502 /apk_perhotelan/error
+ErrorDocument 503 /apk_perhotelan/error
