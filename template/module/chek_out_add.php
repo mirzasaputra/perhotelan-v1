@@ -233,7 +233,7 @@ if($qty == 0){
                 <div class="form-group">
                     <a href="?module=chek_in" class="btn btn-danger">Cancel</a>
                     <a href="template/cetak.php?cetak=invoice&id=<?=$id;?>" target="_blank" class="btn btn-warning"><i class="fas fa-print"></i> <?=($i['bayar'] > 0) ? 'Print Bukti Pembayaran' : 'Print Invoice'; ?></a>
-                    <?=($i['bayar'] > 0) ? '<a href="?module=chek_out_add&id=<?=$id;?>" class="btn btn-success" type="submit"><i class="fas fa-check pr-1"></i> Selesai</a>' : '<button class="btn btn-primary" type="submit"><i class="fas fa-key pr-1"></i> Chek Out</button>'; ?>
+                    <?=($i['bayar'] > 0) ? '<a href="?dashboard" class="btn btn-success" type="submit"><i class="fas fa-check pr-1"></i> Selesai</a>' : '<button class="btn btn-primary" type="submit"><i class="fas fa-key pr-1"></i> Chek Out</button>'; ?>
                 </div>
             </form>
         </div>
