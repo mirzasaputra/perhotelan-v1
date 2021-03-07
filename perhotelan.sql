@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 05, 2021 at 01:13 PM
+-- Generation Time: Mar 08, 2021 at 12:23 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.3.22
 
@@ -92,7 +92,7 @@ CREATE TABLE `kamar` (
 
 INSERT INTO `kamar` (`id_kamar`, `no_kamar`, `id_tipe_kamar`, `max_dewasa`, `max_anak`, `status`) VALUES
 (1, '100', '1', '2', '2', 'kotor'),
-(2, '101', '1', '2', '2', 'Tersedia'),
+(2, '101', '1', '2', '2', 'kotor'),
 (3, '102', '1', '2', '2', 'Tersedia'),
 (4, '103', '1', '2', '2', 'Tersedia');
 
@@ -112,6 +112,14 @@ CREATE TABLE `laundry` (
   `status` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `laundry`
+--
+
+INSERT INTO `laundry` (`id_laundry`, `id_kamar`, `waktu`, `tanggal`, `type`, `total`, `status`) VALUES
+(1, 2, '22:39', '2021-03-05', 'gentlemen', '15000', 'selesai'),
+(2, 2, '14:13', '2021-03-07', 'ladies', '35000', 'selesai');
+
 -- --------------------------------------------------------
 
 --
@@ -126,6 +134,14 @@ CREATE TABLE `laundry_detail` (
   `qty` varchar(30) NOT NULL,
   `total` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `laundry_detail`
+--
+
+INSERT INTO `laundry_detail` (`id_laundry_detail`, `id_laundry`, `id_jenis_laundry`, `article`, `qty`, `total`) VALUES
+(13, 1, 2, 'adasd', '1', '15000'),
+(14, 2, 21, 'qweqwe', '1', '35000');
 
 -- --------------------------------------------------------
 
@@ -194,15 +210,16 @@ CREATE TABLE `perusahaan` (
   `no_telp` varchar(20) NOT NULL,
   `no_fax` varchar(20) NOT NULL,
   `website` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL
+  `email` varchar(100) NOT NULL,
+  `logo` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `perusahaan`
 --
 
-INSERT INTO `perusahaan` (`id_perusahaan`, `nama_hotel`, `nama_perusahaan`, `jalan`, `no_jalan`, `kecamatan`, `kabupaten`, `provinsi`, `no_telp`, `no_fax`, `website`, `email`) VALUES
-(1, 'Hotel Santika', 'PT. Jaya Abadi', 'Pattimura', '23', 'Muncar', 'Banyuwangi', 'Jawa Timur', '0(333) 3633', '0(333) 2333', 'www.santikamyhotel.com', 'santikahotel.id@gmail.com');
+INSERT INTO `perusahaan` (`id_perusahaan`, `nama_hotel`, `nama_perusahaan`, `jalan`, `no_jalan`, `kecamatan`, `kabupaten`, `provinsi`, `no_telp`, `no_fax`, `website`, `email`, `logo`) VALUES
+(1, 'Hotel Santika', 'PT. Jaya Abadi', 'Pattimura', '23', 'Muncar', 'Banyuwangi', 'Jawa Timur', '0(333) 3633', '0(333) 2333', 'www.santikamyhotel.com', 'santikahotel.id@gmail.com', 'logo_951484_07_03_2021.jpeg');
 
 -- --------------------------------------------------------
 
@@ -321,6 +338,7 @@ CREATE TABLE `transaksi_kamar` (
   `diskon` int(11) NOT NULL,
   `deposit` varchar(20) NOT NULL,
   `surcharge` varchar(30) NOT NULL,
+  `metode_pembayaran` varchar(100) NOT NULL,
   `status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -328,8 +346,9 @@ CREATE TABLE `transaksi_kamar` (
 -- Dumping data for table `transaksi_kamar`
 --
 
-INSERT INTO `transaksi_kamar` (`id_transaksi_kamar`, `no_invoice`, `tanggal`, `id_tamu`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`, `tgl_checkin`, `waktu_checkin`, `tgl_checkout`, `waktu_checkout`, `total_biaya_kamar`, `bayar`, `diskon`, `deposit`, `surcharge`, `status`) VALUES
-('ID294988', 'INV-25301950-87', '2021-03-05', 'ID27538', 1, '2', '1', '2021-03-05', '09:12', '2021-03-07', '12:00', '300000', '324000', 40000, '100000', '100000', 'check out');
+INSERT INTO `transaksi_kamar` (`id_transaksi_kamar`, `no_invoice`, `tanggal`, `id_tamu`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`, `tgl_checkin`, `waktu_checkin`, `tgl_checkout`, `waktu_checkout`, `total_biaya_kamar`, `bayar`, `diskon`, `deposit`, `surcharge`, `metode_pembayaran`, `status`) VALUES
+('ID294988', 'INV-25301950-87', '2021-03-05', 'ID27538', 1, '2', '1', '2021-03-05', '09:12', '2021-03-07', '12:00', '300000', '324000', 40000, '100000', '100000', 'cash', 'check out'),
+('ID760380', 'INV-1313273-60', '2021-03-05', 'ID27538', 2, '2', '1', '2021-03-05', '22:14', '2021-03-07', '12:00', '300000', '265000', 0, '100000', '', 'transfer', 'check out');
 
 -- --------------------------------------------------------
 
@@ -345,6 +364,14 @@ CREATE TABLE `transaksi_laundry` (
   `total` varchar(30) NOT NULL,
   `bayar` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `transaksi_laundry`
+--
+
+INSERT INTO `transaksi_laundry` (`id_transaksi_laundry`, `id_laundry`, `waktu`, `tanggal`, `total`, `bayar`) VALUES
+(7, 1, '22:42', '2021-03-05', '18150', '19000'),
+(8, 2, '14:15', '2021-03-07', '42350', '43000');
 
 -- --------------------------------------------------------
 
@@ -506,13 +533,13 @@ ALTER TABLE `kamar`
 -- AUTO_INCREMENT for table `laundry`
 --
 ALTER TABLE `laundry`
-  MODIFY `id_laundry` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_laundry` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `laundry_detail`
 --
 ALTER TABLE `laundry_detail`
-  MODIFY `id_laundry_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_laundry_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `meja`
@@ -548,7 +575,7 @@ ALTER TABLE `tipe_kamar`
 -- AUTO_INCREMENT for table `transaksi_laundry`
 --
 ALTER TABLE `transaksi_laundry`
-  MODIFY `id_transaksi_laundry` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_transaksi_laundry` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `transaksi_resto`
