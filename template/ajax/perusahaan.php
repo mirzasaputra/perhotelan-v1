@@ -13,7 +13,7 @@ $i = mysqli_fetch_array($query);
     <div class="card bg-light">
         <div class="card-header"><h3><i class="fas fa-building pr-3"></i> Company - <span class="small">Edit Company</span></h3></div>
         <div class="card-body">
-            <form action="proses/ubah_perusahaan.php" method="post" id="form">
+            <form action="proses/ubah_perusahaan.php" method="post" id="form" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?=$i['id_perusahaan'];?>">
                 <div class="row">
                     <div class="col-sm-6">
@@ -32,6 +32,13 @@ $i = mysqli_fetch_array($query);
                         <div class="form-group">
                             <label>E-Mail</label>
                             <input type="email" class="form-control" name="email" value="<?=$i['email'];?>" placeholder="E-Mail">
+                        </div>
+                        <div class="form-group">
+                            <label>Logo</label>
+                            <input type="file" name="logo" class="form-control-file" id="imgFile">
+                        </div>
+                        <div class="form-group">
+                            <img src="<?= $i['logo'] == '' ? 'assets/img/blank_images.svg' : 'assets/img/'. $i['logo']; ?>" width="150" id="imgPreview" alt="">
                         </div>
                     </div>
                     <div class="col-sm-6">

@@ -210,28 +210,30 @@ if($qty == 0){
                             <th colspan="2">Grand Total</th>
                             <th class="grandTotal <?php if(($total + $i['surcharge'] + ($total * 0.21) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format($total + $i['surcharge'] + ($total * 0.21) - $i['deposit'], 0, ',', '.');?></th>
                         </tr>
-
-                        <?php if(($total + $i['surcharge'] + ($total * 0.21) - $i['deposit']) > 0 ) : ?>
+                        <tr align="center">
+                            <th class='border-0'></th>
+                            <th colspan="2">Payment Metode</th>
+                            <th><?=($i['bayar'] > 0) ? ucwords($i['metode_pembayaran']) : '<input type="radio" name="metode" id="cash" value="cash"> <label for="cash">Cash</label> <i class="ml-3"></i> <input type="radio" name="metode" id="tf" value="transfer"> <label for="tf">Transfer</label>'; ?></th>
+                        </tr>
                         <tr align="center">
                             <th class='border-0'></th>
                             <th colspan="2">Pay</th>
                             <input type="hidden" name="total" id="grandTotal" value="<?=$total + $i['surcharge'] + ($total * 0.21) - $i['deposit'];?>">
-                            <th><input type="text" name="bayar" id="pay" class="form-control" placeholder="Bayar..." required autocomplete="off"></th>
+                            <th><?=($i['bayar'] > 0) ? 'Rp. '. $i['bayar'] : '<input type="text" name="bayar" id="pay" class="form-control" placeholder="Bayar..." required autocomplete="off">'; ?></th>
                         </tr>
                         <tr align="center">
                             <th class='border-0'></th>
                             <th colspan="2">Refund</th>
-                            <th class="text-success" id="refund">Rp. 0</th>
+                            <th class="text-success" id="refund"><?=($i['bayar'] > 0) ? $i['bayar'] - ($total + $i['surcharge'] + ($total * 0.21) - $i['deposit']) : 'Rp. 0'; ?></th>
                         </tr>
-                        <?php endif;?>
 
                     </table>
                 </div>
 
                 <div class="form-group">
                     <a href="?module=chek_in" class="btn btn-danger">Cancel</a>
-                    <a href="template/cetak.php?cetak=invoice&id=<?=$id;?>" target="_blank" class="btn btn-success"><i class="fas fa-print"></i> Print Invoice</a>
-                    <button class="btn btn-primary" type="submit"><i class="fas fa-key pr-1"></i> Chek Out</button>
+                    <a href="template/cetak.php?cetak=invoice&id=<?=$id;?>" target="_blank" class="btn btn-warning"><i class="fas fa-print"></i> <?=($i['bayar'] > 0) ? 'Print Bukti Pembayaran' : 'Print Invoice'; ?></a>
+                    <?=($i['bayar'] > 0) ? '<a href="?module=chek_out_add&id=<?=$id;?>" class="btn btn-success" type="submit"><i class="fas fa-check pr-1"></i> Selesai</a>' : '<button class="btn btn-primary" type="submit"><i class="fas fa-key pr-1"></i> Chek Out</button>'; ?>
                 </div>
             </form>
         </div>
@@ -333,7 +335,7 @@ if($qty == 0){
                             icon: 'success',
                             text: data.pesan
                         }).then(function(){
-                            window.location.assign('?module=dashboard');
+                            window.location.reload();
                         });
                     }
                     else {

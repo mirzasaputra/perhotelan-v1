@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "../config/database.php";
 include "../assets/pdf/fpdf.php";
 
@@ -26,15 +27,17 @@ $pdf->setMargins(1, 1, 1);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->setFont('times', 'B', 18);
-$pdf->multiCell(19, 0.5, $perusahaan['nama_hotel'], 0, 'L');
+$pdf->Image('../assets/img/'. $perusahaan['logo'], 1, 1, 2);
+$pdf->multiCell(19, 0.5, $perusahaan['nama_hotel'], 0, 'C');
 $pdf->setFont('times', '', 13);
-$pdf->multiCell(19, 0.8, $perusahaan['nama_perusahaan'], 0, 'L');
+$pdf->multiCell(19, 0.8, $perusahaan['nama_perusahaan'], 0, 'C');
 $pdf->setFont('times', '', 11);
-$pdf->multiCell(19, 0.3, 'Alamat : Jl. ' . $perusahaan['jalan'] . ' No. ' . $perusahaan['no_jalan'] . ' ' . $perusahaan['kecamatan']. ', ' . $perusahaan['kabupaten'] . ', ' . $perusahaan['provinsi'] . '      No. Telp : ' . $perusahaan['no_telp'] . '     No. Fax : ' . $perusahaan['no_fax'], 0, 'L');
-$pdf->multiCell(19, 0.7,  'Website : ' . $perusahaan['website'] . '    Email : ' . $perusahaan['email']);
-$pdf->line(1, 3.5, 20, 3.5);
+$pdf->multiCell(19, 0.4, 'Alamat : Jl. ' . $perusahaan['jalan'] . ' No. ' . $perusahaan['no_jalan'] . ' ' . $perusahaan['kecamatan']. ', ' . $perusahaan['kabupaten'] . ', ' . $perusahaan['provinsi'], 0, 'C');
+$pdf->multiCell(19, 0.4, 'No. Telp : ' . $perusahaan['no_telp'] . '     No. Fax : ' . $perusahaan['no_fax'], 0, 'C');
+$pdf->multiCell(19, 0.4,  'Website : ' . $perusahaan['website'] . '    Email : ' . $perusahaan['email'], 0, 'C');
+$pdf->line(1, 4, 20, 4);
 $pdf->setLineWidth(0.1);
-$pdf->line(1, 3.6, 20, 3.6);
+$pdf->line(1, 4.1, 20, 4.1);
 $pdf->setLineWidth(0);
 $pdf->ln(1);
 if($_GET['cetak'] == 'pesanan') : 
@@ -493,6 +496,29 @@ if($_GET['cetak'] == 'invoice') :
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  Grand Total', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($total + $i['surcharge'] + ($total * 0.21) - $i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
+
+    if($i['bayar']){
+        $pdf->cell(11, 0.8, '', 0, 0, 'L');
+        $pdf->cell(5, 0.8, '  Payment Metode', 1, 0, 'L');
+        $pdf->cell(3, 0.8,  ' '. ucwords($i['metode_pembayaran']), 1, 1, 'L');
+
+        $pdf->cell(11, 0.8, '', 0, 0, 'L');
+        $pdf->cell(5, 0.8, '  Pay', 1, 0, 'L');
+        $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'], 0, ',', '.') . ',-', 1, 1, 'L');
+
+        $pdf->cell(11, 0.8, '', 0, 0, 'L');
+        $pdf->cell(5, 0.8, '  Refund', 1, 0, 'L');
+        $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'] - ($total + $i['surcharge'] + ($total * 0.21) - $i['deposit']), 0, ',', '.') . ',-', 1, 1, 'L');
+    }
+
+    $user = $_SESSION['user'];
+    $pass = $_SESSION['pass'];
+    $dataUser = mysqli_query($conn, "SELECT * FROM user WHERE username='$user' && password='$pass'");
+    $dataUser = mysqli_fetch_array($dataUser);
+
+    $pdf->cell(5, 2, '', 0, 1, 'C');
+    $pdf->cell(5, 2, 'Prepared By', 0, 1, 'C');
+    $pdf->cell(5, 2, '('. $dataUser['nama_user'] .')', 0, 1, 'C');
 
 endif;
 

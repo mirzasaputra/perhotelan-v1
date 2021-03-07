@@ -23,6 +23,7 @@ if($_GET['act'] == 'chek_out'){
     $id_transaksi = $_POST['id_transaksi_kamar'];
     $kamar = $_POST['id_kamar'];
     $diskon = $_POST['diskon'];
+    $metode = $_POST['metode'];
 
     if(empty($_POST['bayar'])){
         $bayar = '';
@@ -39,7 +40,7 @@ if($_GET['act'] == 'chek_out'){
         $waktu = $date->format('H:i');
         $tgl = $date->format('Y-m-d');
 
-        $query = mysqli_query($conn, "UPDATE transaksi_kamar SET bayar='$bayar', diskon='$diskon', status='check out' WHERE id_transaksi_kamar='$id_transaksi'");
+        $query = mysqli_query($conn, "UPDATE transaksi_kamar SET bayar='$bayar', diskon='$diskon', metode_pembayaran='$metode', status='check out' WHERE id_transaksi_kamar='$id_transaksi'");
         
         if($query){
             mysqli_query($conn, "UPDATE kamar SET status='kotor' WHERE id_kamar='$kamar'");
