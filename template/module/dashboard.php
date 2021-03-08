@@ -60,7 +60,7 @@ $start2 = ($page2 - 1) * $per_hal;
                   </div>
                   <div class="mr-5"><h2><?=$kotor;?></h2>Dirty Room</div>
                 </div>
-                <a class="card-footer text-white clearfix small z-1" href="#">
+                <a class="card-footer text-white clearfix small z-1" href="?module=kamar_kotor">
                   <span class="float-left">View Details</span>
                   <span class="float-right">
                     <i class="fas fa-angle-right"></i>
