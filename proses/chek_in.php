@@ -36,7 +36,7 @@ if($inap < 1){
     $data['pesan'] = 'Date Check Out Invalid';
 } else {
     if(mysqli_query($conn, "UPDATE kamar SET status='Terpakai' WHERE id_kamar='$id_kamar'")){
-        $query = mysqli_query($conn, "INSERT INTO transaksi_kamar VALUES ('$id_transaksi', '$no_invoice', '$tgl', '$id_tamu', '$id_kamar', '$jumlah_dewasa', '$jumlah_anak', '$tgl_chekin', '$waktu_chekin', '$tgl_chekout', '$waktu_chekout', '$total_biaya', '', 0,'$deposit', '', 'check in')");
+        $query = mysqli_query($conn, "INSERT INTO transaksi_kamar VALUES ('$id_transaksi', '$no_invoice', '$tgl', '$id_tamu', '$id_kamar', '$jumlah_dewasa', '$jumlah_anak', '$tgl_chekin', '$waktu_chekin', '$tgl_chekout', '$waktu_chekout', '$total_biaya', '', 0,'$deposit', '', '', 'check in')");
         if($query){
             $data['hasil'] = true;
             $data['pesan'] = 'Transaction Success';
