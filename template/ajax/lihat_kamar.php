@@ -6,7 +6,7 @@ $user = $_SESSION["user"];
 $pass = $_SESSION["pass"];
 $data_user = mysqli_query($conn, "SELECT * FROM user WHERE username='$user' && password ='$pass'");
 $data_user = mysqli_fetch_array($data_user);
-$query = mysqli_query($conn, "SELECT kamar.*, tipe_kamar.* FROM kamar, tipe_kamar");
+$query = mysqli_query($conn, "SELECT kamar.*, tipe_kamar.* FROM kamar, tipe_kamar WHERE tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
 ?>
 <div class="container-fluid">
 

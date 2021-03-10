@@ -441,7 +441,7 @@ if($_GET['cetak'] == 'invoice') :
         $qty = 1;
     }
 
-    $pdf->setFont('arial', '', 10);
+    $pdf->setFont('arial', '', 8);
     $pdf->cell(11, 0.7, '  Room Reserved Type : ' . $i['tipe_kamar'], 1, 0, 'L');
     $pdf->cell(3, 0.7, '  Rp. ' . number_format($i['harga_per_mlm'], 0, ',', '.') . ',-', 1, 0, 'L');
     $pdf->cell(2, 0.7, '  ' . $qty . ' Malam', 1, 0, 'L');
@@ -471,10 +471,14 @@ if($_GET['cetak'] == 'invoice') :
     endif;
     
     if(empty($c['total'])){$c['total'] = '0';} $a = mysqli_query($conn, "SELECT SUM(total) as total FROM pesanan WHERE id_transaksi_kamar='" . $i['id_transaksi_kamar'] . "' && status='Menunggu Pembayaran'");$b=mysqli_fetch_array($a);$total = $b['total'] + $i['total_biaya_kamar'] + $c['total'];
-    $pdf->setFont('arial', 'B', 10);
+    $pdf->setFont('arial', 'B', 8);
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  Sub Total', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($total, 0, ',', '.') . ',-', 1, 1, 'L');
+
+    $pdf->cell(11, 0.8, '', 0, 0, 'L');
+    $pdf->cell(5, 0.8, '  Discount', 1, 0, 'L');
+    $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['diskon'], 0, ',', '.') . ',-', 1, 1, 'L');
     
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  Surcharge', 1, 0, 'L');
@@ -490,25 +494,30 @@ if($_GET['cetak'] == 'invoice') :
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($total * 0.21, 0, ',', '.') . ',-', 1, 1, 'L');
 
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
-    $pdf->cell(5, 0.8, '  Down Payment', 1, 0, 'L');
+    $pdf->cell(3, 0.8, '', 0, 0, 'L');
+    $pdf->cell(2, 0.8, '  Dp', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
 
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
-    $pdf->cell(5, 0.8, '  Grand Total', 1, 0, 'L');
-    $pdf->cell(3, 0.8, '  Rp. ' . number_format($total + $i['surcharge'] + ($total * 0.21) - $i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
+    $pdf->cell(3, 0.8, '', 0, 0, 'L');
+    $pdf->cell(2, 0.8, '  Grand Total', 1, 0, 'L');
+    $pdf->cell(3, 0.8, '  Rp. ' . number_format(($total - $i['diskon']) + $i['surcharge'] + ($total * 0.21) - $i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
 
     if($i['bayar']){
         $pdf->cell(11, 0.8, '', 0, 0, 'L');
-        $pdf->cell(5, 0.8, '  Payment Metode', 1, 0, 'L');
+        $pdf->cell(3, 0.8, '', 0, 0, 'L');
+        $pdf->cell(2, 0.8, '  Via', 1, 0, 'L');
         $pdf->cell(3, 0.8,  ' '. ucwords($i['metode_pembayaran']), 1, 1, 'L');
 
         $pdf->cell(11, 0.8, '', 0, 0, 'L');
-        $pdf->cell(5, 0.8, '  Pay', 1, 0, 'L');
+        $pdf->cell(3, 0.8, '', 0, 0, 'L');
+        $pdf->cell(2, 0.8, '  Pay', 1, 0, 'L');
         $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'], 0, ',', '.') . ',-', 1, 1, 'L');
 
         $pdf->cell(11, 0.8, '', 0, 0, 'L');
-        $pdf->cell(5, 0.8, '  Refund', 1, 0, 'L');
-        $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'] - ($total + $i['surcharge'] + ($total * 0.21) - $i['deposit']), 0, ',', '.') . ',-', 1, 1, 'L');
+        $pdf->cell(3, 0.8, '', 0, 0, 'L');
+        $pdf->cell(2, 0.8, '  Refund', 1, 0, 'L');
+        $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'] - (($total - $i['diskon']) + $i['surcharge'] + ($total * 0.21) - $i['deposit']), 0, ',', '.') . ',-', 1, 1, 'L');
     }
 
     $user = $_SESSION['user'];

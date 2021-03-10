@@ -153,20 +153,9 @@ if($qty == 0){
                         </tr>
                         <tr align="center">
                             <th class='border-0'></th>
-                            <th colspan="2">Surcharge</th>
-                            <th width="35%">
-                                <?php if($i['surcharge'] == ''){ ?>
-                                    <a href="#surcharge" data-toggle="modal"><span class="badge badge-primary p-2">Add Surcharge</span></a>
-                                    <?php $i['surcharge'] = 0;?>
-                                <?php } else { ?>
-                                    Rp. <?=number_format($i['surcharge'], 0, ',', '.');?>
-                                <?php } ?>
-                            </th>
-                        </tr>
-                        <tr align="center">
-                            <th class='border-0'></th>
                             <th colspan="2">Diskon</th>
                             <th>
+                                <?php if($i['diskon'] <= 0){ ?>
                                 <div class="row">
                                     <div class="col-5">
                                         <div class="input-group">
@@ -185,12 +174,27 @@ if($qty == 0){
                                         </div>
                                     </div>
                                 </div>
+                                <?php } else { ?>
+                                    Rp. <?=number_format($i['diskon'], 0, ',', '.');?>
+                                <?php } ?>
+                            </th>
+                        </tr>
+                        <tr align="center">
+                            <th class='border-0'></th>
+                            <th colspan="2">Surcharge</th>
+                            <th width="35%">
+                                <?php if($i['surcharge'] == '' && $i['bayar'] == 0){ ?>
+                                    <a href="#surcharge" data-toggle="modal"><span class="badge badge-primary p-2">Add Surcharge</span></a>
+                                    <?php $i['surcharge'] = 0;?>
+                                <?php } else { ?>
+                                    Rp. <?=number_format(($i['surcharge'] == '') ? 0 : $i['surcharge'], 0, ',', '.');?>
+                                <?php } ?>
                             </th>
                         </tr>
                         <tr align="center">
                             <th class='border-0'></th>
                             <th colspan="2">Total</th>
-                            <th id="totalView">Rp. <?=number_format($total + $i['surcharge'], 0, ',', '.');?></th>
+                            <th id="totalView">Rp. <?=number_format($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']), 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$i['surcharge'];?>" id="surchargeVal">
                         </tr>
                         <tr align="center">
@@ -208,7 +212,7 @@ if($qty == 0){
                         <tr align="center">
                             <th class='border-0'></th>
                             <th colspan="2">Grand Total</th>
-                            <th class="grandTotal <?php if(($total + $i['surcharge'] + ($total * 0.21) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format($total + $i['surcharge'] + ($total * 0.21) - $i['deposit'], 0, ',', '.');?></th>
+                            <th class="grandTotal <?php if(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format(($total - $i['diskon']) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit'], 0, ',', '.');?></th>
                         </tr>
                         <tr align="center">
                             <th class='border-0'></th>
@@ -224,7 +228,7 @@ if($qty == 0){
                         <tr align="center">
                             <th class='border-0'></th>
                             <th colspan="2">Refund</th>
-                            <th class="text-success" id="refund"><?=($i['bayar'] > 0) ? $i['bayar'] - ($total + $i['surcharge'] + ($total * 0.21) - $i['deposit']) : 'Rp. 0'; ?></th>
+                            <th class="text-success" id="refund">Rp. <?=($i['bayar'] > 0) ? $i['bayar'] - (($total - $i['diskon']) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) : 'Rp. 0'; ?></th>
                         </tr>
 
                     </table>
@@ -367,8 +371,6 @@ if($qty == 0){
     function diskon(){
         let total = $('#subtotal').val(), diskon = $('#diskon').val(), surcharge = $('#surchargeVal').val(), taxService = $('#taxServiceVal').val(), deposit = $('#deposit').val();
 
-        total = parseInt(total) + parseInt(surcharge);
-
         let jumlah = (total * diskon) / 100;
         $('#diskonVal').val(jumlah);
 
@@ -378,7 +380,7 @@ if($qty == 0){
         $('#totalView').html('Rp. '+ rupiah(total));
             
         //set grand total
-        total = parseInt(total) + parseInt(taxService) - parseInt(deposit);
+        total = (parseInt(total) + parseInt(surcharge) + parseInt(taxService)) - parseInt(deposit);
         $('.grandTotal').html('Rp. '+ rupiah(total));
         $('#grandTotal').val(total);
     }
