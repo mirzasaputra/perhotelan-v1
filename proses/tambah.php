@@ -67,4 +67,28 @@ if(isset($_GET['pesanan'])){
     }
 }
 
+if(isset($_GET['room'])){
+    //mengambil nilai variabel
+    $id = $_GET['id'];
+    $id_room = $_POST['room_id'];
+    $dewasa = $_POST['dewasa'];
+    $anak = $_POST['anak'];
+
+    $check = mysqli_query($conn, "SELECT * FROM transaksi_kamar_detail WHERE id_kamar='$id_room' && id_transaksi_kamar='$id'");
+
+    if(mysqli_num_rows($check) > 0){
+        $data['pesan'] = 'Room sudah ada dalam daftar';
+    } else {
+        $query = mysqli_query($conn,  "INSERT INTO transaksi_kamar_detail VALUES(null, '$id', '$id_room', '$anak', '$dewasa')");
+    
+        if($query){
+            $data['hasil'] = true;
+            $data['pesan'] = "Room Success Added";
+        } else {
+            $data['pesan'] = mysqli_error($conn);
+        }
+    }
+
+}
+
 echo json_encode($data);

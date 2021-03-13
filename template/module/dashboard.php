@@ -28,7 +28,7 @@ $start2 = ($page2 - 1) * $per_hal;
                   </div>
                     <div class="mr-5"><h2><?=$tersedia;?></h2> Room Available</div>
                 </div>
-                <a class="card-footer text-white clearfix small z-1" href="?module=chek_in">
+                <a class="card-footer text-white clearfix small z-1" href="?module=chek_in2">
                   <span class="float-left">View Details</span>
                   <span class="float-right">
                     <i class="fas fa-angle-right"></i>
@@ -44,7 +44,7 @@ $start2 = ($page2 - 1) * $per_hal;
                   </div>
                   <div class="mr-5"><h2><?=$terpakai;?></h2> Room Used</div>
                 </div>
-                <a class="card-footer text-white clearfix small z-1" href="?module=chek_out">
+                <a class="card-footer text-white clearfix small z-1" href="?module=chek_out2">
                   <span class="float-left">View Details</span>
                   <span class="float-right">
                     <i class="fas fa-angle-right"></i>
@@ -77,7 +77,7 @@ $start2 = ($page2 - 1) * $per_hal;
             <div class="card bg-white border-top-2-primary">
               <div class="card-header"><h4>Guest staying overnight</h4></div>
               <div class="card-body">
-                    <?php $query = mysqli_query($conn, "SELECT transaksi_kamar.*, tamu.*, kamar.*  FROM transaksi_kamar, tamu, kamar WHERE transaksi_kamar.status='Check In' && tamu.id_tamu=transaksi_kamar.id_tamu && kamar.id_kamar=transaksi_kamar.id_kamar ORDER BY tgl_checkin DESC LIMIT $start, $per_hal");
+                    <?php $query = mysqli_query($conn, "SELECT transaksi_kamar.*, tamu.*, kamar.*, transaksi_kamar_detail.*  FROM transaksi_kamar, tamu, kamar, transaksi_kamar_detail WHERE transaksi_kamar.status='check in' && tamu.id_tamu=transaksi_kamar.id_tamu && transaksi_kamar_detail.id_transaksi_kamar=transaksi_kamar.id_transaksi_kamar && kamar.id_kamar=transaksi_kamar_detail.id_kamar ORDER BY tgl_checkin DESC LIMIT $start, $per_hal");
                   if(mysqli_num_rows($query)<=0){ ?>
                     <div class="alert alert-success">
                       Sorry, for the moment there are no guest staying.

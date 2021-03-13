@@ -6,7 +6,7 @@
         <li class="nav-item dropdown">
             <a href="#" class="dropdown-toggle nav-link" id="alertDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img src="assets/img/<?=$data_user['image'];?>" alt="" class="img-circle img-adm">
-                <span>Administrator</span>
+                <span><?=$data_user['level'];?></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-img">

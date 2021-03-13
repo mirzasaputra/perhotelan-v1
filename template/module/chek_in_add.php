@@ -1,24 +1,30 @@
 <?php
 $id = $_GET['id'];
 $query = mysqli_query($conn, "SELECT * FROM tamu");
-$max_tamu = mysqli_query($conn, "SELECT kamar.*, tipe_kamar.* FROM kamar, tipe_kamar WHERE kamar.id_kamar='$id'");
-$tamu = mysqli_fetch_array($max_tamu);
+$tamu = mysqli_query($conn, "SELECT * FROM tamu WHERE id_tamu='$id'");
+$tamu = mysqli_fetch_array($tamu);
 ?>
 <div class="container-fluid">
 
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="?module=dashboard">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="?module=chek_in">Select Room</a></li>
+        <li class="breadcrumb-item"><a href="?module=chek_in">Select Guest</a></li>
         <li class="breadcrumb-item active">Overview</li>
     </ol>
 
     <div class="card bg-light">
         <div class="card-header"><h3>Chek In</h3></div>
         <div class="card-body">
-            <form action="proses/chek_in.php" method="post" id="formChekIn">
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="form-group">
+                        <div class="table-responsive">
+                            <button class="btn btn-info" type="button" data-toggle="modal" data-target="#myModal"><i class="fas fa-plus"></i> Add Room</button>
+                            
+                            <br><br><br>
+
+                            <div id="viewDataRoom" data-id="<?=$id;?>"></div>
+                        </div>
+                        <!-- <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-7">
                                     <label>No. Invoice</label>
@@ -54,10 +60,25 @@ $tamu = mysqli_fetch_array($max_tamu);
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-sm-6 pl-4">
-                        <div class="form-group">
+                    <form action="proses/chek_in.php?check_in" method="post" id="formChekIn">
+                    <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>No. Invoice</label>
+                                    <input type="hidden" name="id_transaksi" value="<?=$_GET['id_transaksi'];?>">
+                                    <input type="text" class="form-control" name="no_invoice" value="<?='INV-' . rand(1, 99999999) . '-' . rand(1, 99);?>" readonly>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>Guest Name</label>
+                                    <input type="hidden" name="tamu_id" value="<?=$id;?>">
+                                    <input type="text" class="form-control" value="<?=$tamu['prefix'] .' '. $tamu['nama_depan'] .' '. $tamu['nama_belakang'];?>" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label>The number of guest</label>
@@ -78,7 +99,7 @@ $tamu = mysqli_fetch_array($max_tamu);
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-6">
@@ -122,6 +143,74 @@ $tamu = mysqli_fetch_array($max_tamu);
 
 <script>
     $(document).ready(function(){
+        loadDataRoom();
+
+        function loadDataRoom()
+        {
+            var id = $('#viewDataRoom').data('id');
+
+            $.ajax({
+                url: 'template/ajax/data_room.php?id='+ id +'&&id_transaksi=<?=$_GET['id_transaksi'];?>',
+                dataType: 'html',
+                success: function(data){
+                    $('#viewDataRoom').html(data);
+
+                    $('#formRoom').submit(function(e){
+                        e.preventDefault();
+                        $.ajax({
+                            url: $(this).attr('action'),
+                            method: $(this).attr('method'),
+                            data: new FormData(this),
+                            dataType: 'json',
+                            contentType: false,
+                            processData: false,
+                            success: function(data){
+                                if(data.hasil == true){
+                                    $('#myModal').modal('hide');
+                                    $('.modal-backdrop').remove();
+                                    $('body').removeClass('modal-open');
+                                    swal({
+                                        title: 'Success',
+                                        icon: 'success',
+                                        text: data.pesan
+                                    });
+                                    loadDataRoom();
+                                } else {
+                                    swal({
+                                        title: 'Failed',
+                                        icon: 'error',
+                                        text: data.pesan
+                                    });
+                                }
+                            }
+                        })
+                    })
+
+                    $('.action').click(function(){
+                        var id = $(this).data('id');
+                        var toggle = $(this).data('toggle');
+
+                        if(toggle == 'delete'){
+                            $.ajax({
+                                url: 'proses/hapus.php?hapus=transaksi_kamar_detail&&id='+ id,
+                                dataType: 'json',
+                                success: function(data){
+                                    if(data.hasil == true){
+                                        loadDataRoom();
+                                    } else {
+                                        swal({
+                                            title: 'Failed',
+                                            icon: 'error',
+                                            text: data.pesan
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
 
         $('#formChekIn').submit(function(e){
             e.preventDefault();

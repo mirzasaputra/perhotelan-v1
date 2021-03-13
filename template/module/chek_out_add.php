@@ -1,6 +1,6 @@
 <?php
-$id = $_GET['id'];
-$query = mysqli_query($conn, "SELECT transaksi_kamar.*, tamu.*, kamar.*, tipe_kamar.* FROM transaksi_kamar, tamu, kamar, tipe_kamar WHERE transaksi_kamar.id_transaksi_kamar='$id' && tamu.id_tamu=transaksi_kamar.id_tamu && kamar.id_kamar=transaksi_kamar.id_kamar && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
+$id = $_GET['id_transaksi'];
+$query = mysqli_query($conn, "SELECT transaksi_kamar.*, tamu.*, kamar.*, tipe_kamar.*, transaksi_kamar_detail.* FROM transaksi_kamar, tamu, kamar, tipe_kamar, transaksi_kamar_detail WHERE transaksi_kamar.id_transaksi_kamar='$id' && tamu.id_tamu=transaksi_kamar.id_tamu && transaksi_kamar_detail.id_transaksi_kamar=transaksi_kamar.id_transaksi_kamar && kamar.id_kamar=transaksi_kamar_detail.id_kamar && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
 $i = mysqli_fetch_array($query);
 
 //meghitung qty
@@ -40,21 +40,9 @@ if($qty == 0){
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="alert bg-info text-white">
-                                        <h3><?=$i['tipe_kamar'];?></h3>
-                                        <p class="mt-3 m-0">Price / Night : Rp. <?=number_format($i['harga_per_mlm'], 0, ',', '.');?></p>
-                                        <p class="m-0">Maximal Adult : <?=$i['max_dewasa'];?></p>
-                                        <p class="m-0">Maximal Children : <?=$i['max_anak'];?></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="col-sm-6 pl-4">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label>The Number Of Guest</label>
@@ -65,7 +53,7 @@ if($qty == 0){
                                     <input type="text" class="form-control" name="jumlah_anak" value="<?=$i['jumlah_anak'];?>" readonly>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-6">
@@ -109,12 +97,14 @@ if($qty == 0){
                             <th>Qty</th>
                             <th>Total</th>
                         </tr>
+                        <?php foreach($query as $data) : ?>
                         <tr>
-                            <td>Room Reserved Type : <?=$i['tipe_kamar'];?></td>
-                            <td>Rp. <?=number_format($i['harga_per_mlm'], 0, ',', '.');?></td>
+                            <td>Room Reserved Type : <?=$data['tipe_kamar'];?></td>
+                            <td>Rp. <?=number_format($data['harga_per_mlm'], 0, ',', '.');?></td>
                             <td><?=$qty;?> Malam</td>
-                            <td>Rp. <?=number_format($i['total_biaya_kamar'], 0, ',', '.');?></td>
+                            <td>Rp. <?=number_format(($data['harga_per_mlm'] * $qty), 0, ',', '.');?></td>
                         </tr>
+                        <?php endforeach;?>
                         <?php 
                         $cek = mysqli_query($conn, "SELECT * FROM pesanan WHERE id_transaksi_kamar='$id' && status='Menunggu Pembayaran'");
                         if(mysqli_num_rows($cek) > 0) : 
