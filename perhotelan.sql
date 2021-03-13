@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 08, 2021 at 12:23 AM
+-- Generation Time: Mar 13, 2021 at 09:12 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.3.22
 
@@ -91,10 +91,11 @@ CREATE TABLE `kamar` (
 --
 
 INSERT INTO `kamar` (`id_kamar`, `no_kamar`, `id_tipe_kamar`, `max_dewasa`, `max_anak`, `status`) VALUES
-(1, '100', '1', '2', '2', 'kotor'),
+(1, '100', '1', '2', '2', 'Tersedia'),
 (2, '101', '1', '2', '2', 'kotor'),
-(3, '102', '1', '2', '2', 'Tersedia'),
-(4, '103', '1', '2', '2', 'Tersedia');
+(3, '102', '1', '2', '2', 'kotor'),
+(4, '103', '1', '2', '2', 'Terpakai'),
+(5, '104', '2', '2', '2', 'Terpakai');
 
 -- --------------------------------------------------------
 
@@ -313,7 +314,8 @@ CREATE TABLE `tipe_kamar` (
 --
 
 INSERT INTO `tipe_kamar` (`id_tipe_kamar`, `tipe_kamar`, `harga_per_mlm`, `harga_per_org`) VALUES
-(1, 'Standart', '150000', '70000');
+(1, 'Standart', '150000', '70000'),
+(2, 'VVIP', '250000', '200000');
 
 -- --------------------------------------------------------
 
@@ -326,9 +328,9 @@ CREATE TABLE `transaksi_kamar` (
   `no_invoice` varchar(20) NOT NULL,
   `tanggal` date NOT NULL,
   `id_tamu` varchar(11) NOT NULL,
-  `id_kamar` int(11) NOT NULL,
-  `jumlah_dewasa` varchar(10) NOT NULL,
-  `jumlah_anak` varchar(10) NOT NULL,
+  `id_kamar` int(11) DEFAULT NULL,
+  `jumlah_dewasa` varchar(10) DEFAULT NULL,
+  `jumlah_anak` varchar(10) DEFAULT NULL,
   `tgl_checkin` date NOT NULL,
   `waktu_checkin` varchar(20) NOT NULL,
   `tgl_checkout` date NOT NULL,
@@ -347,8 +349,32 @@ CREATE TABLE `transaksi_kamar` (
 --
 
 INSERT INTO `transaksi_kamar` (`id_transaksi_kamar`, `no_invoice`, `tanggal`, `id_tamu`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`, `tgl_checkin`, `waktu_checkin`, `tgl_checkout`, `waktu_checkout`, `total_biaya_kamar`, `bayar`, `diskon`, `deposit`, `surcharge`, `metode_pembayaran`, `status`) VALUES
-('ID294988', 'INV-25301950-87', '2021-03-05', 'ID27538', 1, '2', '1', '2021-03-05', '09:12', '2021-03-07', '12:00', '300000', '324000', 40000, '100000', '100000', 'cash', 'check out'),
+('ID294988', 'INV-25301950-87', '2021-03-05', 'ID27538', 1, '2', '1', '2021-03-05', '09:12', '2021-03-07', '12:00', '300000', '324000', 40000, '100000', '100000', 'cash', 'check in'),
+('ID5520810', 'INV-59640321-82', '2021-03-13', 'ID27538', NULL, NULL, NULL, '2021-03-13', '10:03', '2021-03-14', '12:00', '400000', '', 0, '100000', '', '', 'check in'),
+('ID58950', 'INV-31467969-74', '2021-03-08', 'ID27538', 3, '1', '1', '2021-03-08', '14:10', '2021-03-09', '12:00', '150000', '70000', 15000, '100000', '', 'cash', 'check out'),
 ('ID760380', 'INV-1313273-60', '2021-03-05', 'ID27538', 2, '2', '1', '2021-03-05', '22:14', '2021-03-07', '12:00', '300000', '265000', 0, '100000', '', 'transfer', 'check out');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaksi_kamar_detail`
+--
+
+CREATE TABLE `transaksi_kamar_detail` (
+  `id_transaksi_kamar_detail` bigint(20) NOT NULL,
+  `id_transaksi_kamar` varchar(20) NOT NULL,
+  `id_kamar` int(11) NOT NULL,
+  `jumlah_anak` int(11) NOT NULL,
+  `jumlah_dewasa` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `transaksi_kamar_detail`
+--
+
+INSERT INTO `transaksi_kamar_detail` (`id_transaksi_kamar_detail`, `id_transaksi_kamar`, `id_kamar`, `jumlah_anak`, `jumlah_dewasa`) VALUES
+(2, 'ID5520810', 4, 1, 1),
+(5, 'ID5520810', 5, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -496,6 +522,12 @@ ALTER TABLE `transaksi_kamar`
   ADD PRIMARY KEY (`id_transaksi_kamar`);
 
 --
+-- Indexes for table `transaksi_kamar_detail`
+--
+ALTER TABLE `transaksi_kamar_detail`
+  ADD PRIMARY KEY (`id_transaksi_kamar_detail`);
+
+--
 -- Indexes for table `transaksi_laundry`
 --
 ALTER TABLE `transaksi_laundry`
@@ -527,7 +559,7 @@ ALTER TABLE `jenis_laundry`
 -- AUTO_INCREMENT for table `kamar`
 --
 ALTER TABLE `kamar`
-  MODIFY `id_kamar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_kamar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `laundry`
@@ -569,7 +601,13 @@ ALTER TABLE `pesanan_detail`
 -- AUTO_INCREMENT for table `tipe_kamar`
 --
 ALTER TABLE `tipe_kamar`
-  MODIFY `id_tipe_kamar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_tipe_kamar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `transaksi_kamar_detail`
+--
+ALTER TABLE `transaksi_kamar_detail`
+  MODIFY `id_transaksi_kamar_detail` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `transaksi_laundry`
