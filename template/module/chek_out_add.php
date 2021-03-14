@@ -135,15 +135,20 @@ if($qty == 0){
                         <?php endforeach;endif;?>
 
                         <?php if(empty($c['total'])){$c['total'] = '0';} $a = mysqli_query($conn, "SELECT SUM(total) as total FROM pesanan WHERE id_transaksi_kamar='" . $i['id_transaksi_kamar'] . "' && status='Menunggu Pembayaran'");$b=mysqli_fetch_array($a);$total = $b['total'] + $i['total_biaya_kamar'] + $c['total'];?>
-                        <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">Sub-Total</th>
-                            <th>Rp. <?=number_format($total, 0, ',', '.');?></th>
+                        <tr>
+                            <?php $query = mysqli_query($conn, "SELECT * FROM fasilitas");?>
+                            <th colspan="2" rowspan="10" align="left">
+                                Fasilitas :
+                                <?php foreach($query as $f) : ?>
+                                    <div class="d-block" style="font-weight: 100"><input type="checkbox" name="fasilitas" value="<?=$f['fasilitas_name'];?>" id="<?=$f['id'];?>"> <label for="<?=$f['id'];?>"><?=$f['fasilitas_name'];?></label></div>
+                                <?php endforeach;?>
+                            </th>
+                            <th class="text-center">Sub-Total</th>
+                            <th class="text-center">Rp. <?=number_format($total, 0, ',', '.');?></th>
                             <input type="hidden" id="subtotal" value="<?=$total;?>">
                         </tr>
                         <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">Diskon</th>
+                            <th>Diskon</th>
                             <th>
                                 <?php if($i['diskon'] <= 0){ ?>
                                 <div class="row">
@@ -170,8 +175,7 @@ if($qty == 0){
                             </th>
                         </tr>
                         <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">Surcharge</th>
+                            <th>Surcharge</th>
                             <th width="35%">
                                 <?php if($i['surcharge'] == '' && $i['bayar'] == 0){ ?>
                                     <a href="#surcharge" data-toggle="modal"><span class="badge badge-primary p-2">Add Surcharge</span></a>
@@ -182,42 +186,35 @@ if($qty == 0){
                             </th>
                         </tr>
                         <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">Total</th>
+                            <th>Total</th>
                             <th id="totalView">Rp. <?=number_format($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']), 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$i['surcharge'];?>" id="surchargeVal">
                         </tr>
                         <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">21% Tax + Service</th>
+                            <th>21% Tax + Service</th>
                             <th id="taxService">Rp. <?=number_format($total * 0.21, 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$total * 0.21;?>" id="taxServiceVal">
                         </tr>
                         <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">Down Payment</th>
+                            <th>Down Payment</th>
                             <th class="text-danger">Rp. <?=number_format($i['deposit'], 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$i['deposit'];?>" id="deposit">
                         </tr>
                         <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">Grand Total</th>
+                            <th>Grand Total</th>
                             <th class="grandTotal <?php if(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format(($total - $i['diskon']) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit'], 0, ',', '.');?></th>
                         </tr>
                         <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">Payment Metode</th>
+                            <th>Payment Metode</th>
                             <th><?=($i['bayar'] > 0) ? ucwords($i['metode_pembayaran']) : '<input type="radio" name="metode" id="cash" value="cash"> <label for="cash">Cash</label> <i class="ml-3"></i> <input type="radio" name="metode" id="tf" value="transfer"> <label for="tf">Transfer</label>'; ?></th>
                         </tr>
                         <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">Pay</th>
+                            <th>Pay</th>
                             <input type="hidden" name="total" id="grandTotal" value="<?=$total + $i['surcharge'] + ($total * 0.21) - $i['deposit'];?>">
                             <th><?=($i['bayar'] > 0) ? 'Rp. '. $i['bayar'] : '<input type="text" name="bayar" id="pay" class="form-control" placeholder="Bayar..." required autocomplete="off">'; ?></th>
                         </tr>
                         <tr align="center">
-                            <th class='border-0'></th>
-                            <th colspan="2">Refund</th>
+                            <th>Refund</th>
                             <th class="text-success" id="refund">Rp. <?=($i['bayar'] > 0) ? $i['bayar'] - (($total - $i['diskon']) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) : 'Rp. 0'; ?></th>
                         </tr>
 
@@ -285,6 +282,31 @@ if($qty == 0){
                     }
                 }
             });
+        })
+
+        $('input[name="fasilitas"').change(function(){
+            var fasilitas = new Array();
+
+            $('input:checked').each(function(){
+                fasilitas.push($(this).val());
+            })
+
+            $.ajax({
+                url: 'proses/fasilitas.php?session&&id=<?=$id;?>',
+                method: 'post',
+                data: {fasilitas: fasilitas},
+                dataType: 'json',
+                success: function(data){
+
+                },
+                error: function(xhr, ajaxOptions, thrownError){
+                    swal({
+                        title: xhr.status,
+                        icon: 'error',
+                        text: thrownError
+                    });
+                }
+            })
         })
 
         $('#diskon').keyup(function(){

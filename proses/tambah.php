@@ -74,18 +74,25 @@ if(isset($_GET['room'])){
     $dewasa = $_POST['dewasa'];
     $anak = $_POST['anak'];
 
-    $check = mysqli_query($conn, "SELECT * FROM transaksi_kamar_detail WHERE id_kamar='$id_room' && id_transaksi_kamar='$id'");
-
-    if(mysqli_num_rows($check) > 0){
-        $data['pesan'] = 'Room sudah ada dalam daftar';
-    } else {
-        $query = mysqli_query($conn,  "INSERT INTO transaksi_kamar_detail VALUES(null, '$id', '$id_room', '$anak', '$dewasa')");
+    $check_room = mysqli_query($conn, "SELECT * FROM kamar WHERE id_kamar='$id_room'");
+    $check_room = mysqli_fetch_array($check_room);
     
-        if($query){
-            $data['hasil'] = true;
-            $data['pesan'] = "Room Success Added";
+    if($dewasa > $check_room['max_dewasa'] || $anak > $check_room['max_anak']){
+        $data['pesan'] = 'Maaf jumlah maximum tamu dewasa atau anak melebihi batas';
+    } else {
+        $check = mysqli_query($conn, "SELECT * FROM transaksi_kamar_detail WHERE id_kamar='$id_room' && id_transaksi_kamar='$id'");
+    
+        if(mysqli_num_rows($check) > 0){
+            $data['pesan'] = 'Room sudah ada dalam daftar';
         } else {
-            $data['pesan'] = mysqli_error($conn);
+            $query = mysqli_query($conn,  "INSERT INTO transaksi_kamar_detail VALUES(null, '$id', '$id_room', '$anak', '$dewasa')");
+        
+            if($query){
+                $data['hasil'] = true;
+                $data['pesan'] = "Room Success Added";
+            } else {
+                $data['pesan'] = mysqli_error($conn);
+            }
         }
     }
 

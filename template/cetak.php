@@ -408,7 +408,7 @@ if($_GET['cetak'] == 'invoice') :
     $id = $_GET['id'];
     $query = mysqli_query($conn, "SELECT transaksi_kamar.*, tamu.* FROM tamu, transaksi_kamar WHERE transaksi_kamar.id_transaksi_kamar='$id' && tamu.id_tamu=transaksi_kamar.id_tamu");
     $i = mysqli_fetch_array($query);
-
+    
     $pdf->cell(10, 0.5, 'Addressed to : ', 0, 1, 'L');
     $pdf->cell(10, 0.5, $i['prefix'] . '. ' . $i['nama_depan'] . ' ' . $i['nama_belakang'], 0, 1, 'L');
     $pdf->cell(10, 0.5, 'Jln. ' . $i['jalan'] . ' No. ' . $i['no_jalan'] . ', ' . $i['kabupaten'] . ' - ' . $i['provinsi'] . ' - ' . $i['warga_negara'], 0, 1, 'L');
@@ -430,7 +430,7 @@ if($_GET['cetak'] == 'invoice') :
     $pdf->cell(2, 0.8, 'Qty', 1, 0, 'C');
     $pdf->cell(3, 0.8, 'Total', 1, 1, 'C');
 
-    $query = mysqli_query($conn, "SELECT transaksi_kamar.*, tamu.*, kamar.*, tipe_kamar.* FROM transaksi_kamar, tamu, kamar, tipe_kamar WHERE transaksi_kamar.id_transaksi_kamar='$id' && tamu.id_tamu=transaksi_kamar.id_tamu && kamar.id_kamar=transaksi_kamar.id_kamar && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
+    $query = mysqli_query($conn, "SELECT transaksi_kamar.*, transaksi_kamar_detail.*, tamu.*, kamar.*, tipe_kamar.* FROM transaksi_kamar, transaksi_kamar_detail, tamu, kamar, tipe_kamar WHERE transaksi_kamar.id_transaksi_kamar='$id' && tamu.id_tamu=transaksi_kamar.id_tamu && transaksi_kamar_detail.id_transaksi_kamar=transaksi_kamar.id_transaksi_kamar && kamar.id_kamar=transaksi_kamar_detail.id_kamar && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
     $i = mysqli_fetch_array($query);
 
     //meghitung qty
@@ -442,10 +442,12 @@ if($_GET['cetak'] == 'invoice') :
     }
 
     $pdf->setFont('arial', '', 8);
-    $pdf->cell(11, 0.7, '  Room Reserved Type : ' . $i['tipe_kamar'], 1, 0, 'L');
-    $pdf->cell(3, 0.7, '  Rp. ' . number_format($i['harga_per_mlm'], 0, ',', '.') . ',-', 1, 0, 'L');
-    $pdf->cell(2, 0.7, '  ' . $qty . ' Malam', 1, 0, 'L');
-    $pdf->cell(3, 0.7, '  Rp. ' . number_format($i['total_biaya_kamar'], 0, ',', '.') . ',-', 1, 1, 'L');
+    foreach($query as $a){
+        $pdf->cell(11, 0.7, '  Room Reserved Type : ' . $a['tipe_kamar'], 1, 0, 'L');
+        $pdf->cell(3, 0.7, '  Rp. ' . number_format($a['harga_per_mlm'], 0, ',', '.') . ',-', 1, 0, 'L');
+        $pdf->cell(2, 0.7, '  ' . $qty . ' Malam', 1, 0, 'L');
+        $pdf->cell(3, 0.7, '  Rp. ' . number_format($a['harga_per_mlm'] * $qty, 0, ',', '.') . ',-', 1, 1, 'L');
+    }
 
     $cek = mysqli_query($conn, "SELECT * FROM pesanan WHERE id_transaksi_kamar='$id' && status='Menunggu Pembayaran'");
     if(mysqli_num_rows($cek) > 0) : 
@@ -476,6 +478,7 @@ if($_GET['cetak'] == 'invoice') :
     $pdf->cell(5, 0.8, '  Sub Total', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($total, 0, ',', '.') . ',-', 1, 1, 'L');
 
+    
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  Discount', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['diskon'], 0, ',', '.') . ',-', 1, 1, 'L');
@@ -484,42 +487,42 @@ if($_GET['cetak'] == 'invoice') :
     $pdf->cell(5, 0.8, '  Surcharge', 1, 0, 'L');
     if($i['surcharge'] == ''){$i['surcharge'] = '0';}
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['surcharge'], 0, ',', '.') . ',-', 1, 1, 'L');
-
+    
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  Total', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($total + $i['surcharge'], 0, ',', '.') . ',-', 1, 1, 'L');
-
+    
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  21% Tax + Service', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($total * 0.21, 0, ',', '.') . ',-', 1, 1, 'L');
-
+    
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(3, 0.8, '', 0, 0, 'L');
     $pdf->cell(2, 0.8, '  Dp', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
-
+    
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(3, 0.8, '', 0, 0, 'L');
     $pdf->cell(2, 0.8, '  Grand Total', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format(($total - $i['diskon']) + $i['surcharge'] + ($total * 0.21) - $i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
-
+    
     if($i['bayar']){
         $pdf->cell(11, 0.8, '', 0, 0, 'L');
         $pdf->cell(3, 0.8, '', 0, 0, 'L');
         $pdf->cell(2, 0.8, '  Via', 1, 0, 'L');
         $pdf->cell(3, 0.8,  ' '. ucwords($i['metode_pembayaran']), 1, 1, 'L');
-
+        
         $pdf->cell(11, 0.8, '', 0, 0, 'L');
         $pdf->cell(3, 0.8, '', 0, 0, 'L');
         $pdf->cell(2, 0.8, '  Pay', 1, 0, 'L');
         $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'], 0, ',', '.') . ',-', 1, 1, 'L');
-
+        
         $pdf->cell(11, 0.8, '', 0, 0, 'L');
         $pdf->cell(3, 0.8, '', 0, 0, 'L');
         $pdf->cell(2, 0.8, '  Refund', 1, 0, 'L');
         $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'] - (($total - $i['diskon']) + $i['surcharge'] + ($total * 0.21) - $i['deposit']), 0, ',', '.') . ',-', 1, 1, 'L');
     }
-
+    
     $user = $_SESSION['user'];
     $pass = $_SESSION['pass'];
     $dataUser = mysqli_query($conn, "SELECT * FROM user WHERE username='$user' && password='$pass'");
@@ -528,6 +531,12 @@ if($_GET['cetak'] == 'invoice') :
     $pdf->cell(5, 2, '', 0, 1, 'C');
     $pdf->cell(5, 2, 'Prepared By', 0, 1, 'C');
     $pdf->cell(5, 2, '('. $dataUser['nama_user'] .')', 0, 1, 'C');
+    
+    $pdf->setXY(1, 14);
+    $pdf->cell(11, 0.6, 'Fasilitas : ', 0, 1);
+    foreach($_SESSION['fasilitas_'. $id] as $f) {
+        $pdf->cell(11, 0.3, '*'. $f, 0, 1);
+    }
 
 endif;
 

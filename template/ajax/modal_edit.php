@@ -203,3 +203,15 @@ $status = $i['status'];
         <input type="text" name="bayar" class="form-control" placeholder="Pay..." required>
     </div>
 <?php endif;?>
+
+<?php if($_GET['modal'] == 'fasilitas') : ?>
+    <?php
+    $query = mysqli_query($conn, "SELECT * FROM fasilitas WHERE id='$id'");
+    $i = mysqli_fetch_array($query);
+    ?>
+    <input type="hidden" name="id" value="<?=$i['id'];?>">
+    <div class="form-group">
+        <label>Fasilitas Name</label>
+        <input type="text" class="form-control" name="fasilitas" placeholder="Fasilitas Name" value="<?=$i['fasilitas_name'];?>" required autocomplete="off">
+    </div>
+<?php endif;?>

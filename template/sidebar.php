@@ -69,6 +69,7 @@
           <ul>
             <li><a href="?module=lihat_kamar" class="nav-link">View Room</a></li>
             <li><a href="?module=tipe_kamar" class="nav-link">Room Type</a></li>
+            <li><a href="?module=fasilitas" class="nav-link">Fasilitas</a></li>
           </ul>
         </div>
       </li>
