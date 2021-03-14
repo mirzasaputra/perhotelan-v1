@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 13, 2021 at 09:12 AM
+-- Generation Time: Mar 14, 2021 at 04:09 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.3.22
 
@@ -20,6 +20,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `perhotelan`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `fasilitas`
+--
+
+CREATE TABLE `fasilitas` (
+  `id` int(11) NOT NULL,
+  `fasilitas_name` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `fasilitas`
+--
+
+INSERT INTO `fasilitas` (`id`, `fasilitas_name`) VALUES
+(2, 'Makan gratis di setiap pagi'),
+(4, 'Wifi internet gratis'),
+(5, 'Kolam renang');
 
 -- --------------------------------------------------------
 
@@ -349,7 +369,7 @@ CREATE TABLE `transaksi_kamar` (
 --
 
 INSERT INTO `transaksi_kamar` (`id_transaksi_kamar`, `no_invoice`, `tanggal`, `id_tamu`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`, `tgl_checkin`, `waktu_checkin`, `tgl_checkout`, `waktu_checkout`, `total_biaya_kamar`, `bayar`, `diskon`, `deposit`, `surcharge`, `metode_pembayaran`, `status`) VALUES
-('ID294988', 'INV-25301950-87', '2021-03-05', 'ID27538', 1, '2', '1', '2021-03-05', '09:12', '2021-03-07', '12:00', '300000', '324000', 40000, '100000', '100000', 'cash', 'check in'),
+('ID294988', 'INV-25301950-87', '2021-03-05', 'ID27538', 1, '2', '1', '2021-03-05', '09:12', '2021-03-07', '12:00', '300000', '324000', 40000, '100000', '100000', 'cash', 'check out'),
 ('ID5520810', 'INV-59640321-82', '2021-03-13', 'ID27538', NULL, NULL, NULL, '2021-03-13', '10:03', '2021-03-14', '12:00', '400000', '', 0, '100000', '', '', 'check in'),
 ('ID58950', 'INV-31467969-74', '2021-03-08', 'ID27538', 3, '1', '1', '2021-03-08', '14:10', '2021-03-09', '12:00', '150000', '70000', 15000, '100000', '', 'cash', 'check out'),
 ('ID760380', 'INV-1313273-60', '2021-03-05', 'ID27538', 2, '2', '1', '2021-03-05', '22:14', '2021-03-07', '12:00', '300000', '265000', 0, '100000', '', 'transfer', 'check out');
@@ -448,6 +468,12 @@ INSERT INTO `user` (`id_user`, `nama_user`, `image`, `username`, `password`, `le
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `fasilitas`
+--
+ALTER TABLE `fasilitas`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `jenis_laundry`
@@ -550,6 +576,12 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `fasilitas`
+--
+ALTER TABLE `fasilitas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `jenis_laundry`
 --
 ALTER TABLE `jenis_laundry`
@@ -607,7 +639,7 @@ ALTER TABLE `tipe_kamar`
 -- AUTO_INCREMENT for table `transaksi_kamar_detail`
 --
 ALTER TABLE `transaksi_kamar_detail`
-  MODIFY `id_transaksi_kamar_detail` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_transaksi_kamar_detail` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `transaksi_laundry`
