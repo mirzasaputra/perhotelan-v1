@@ -27,7 +27,7 @@ if(isset($_GET['check_in'])){
         $inap = 1;
     }
 
-    $room = mysqli_query($conn, "SELECT kamar.id_kamar, tipe_kamar.harga_per_mlm FROM transaksi_kamar_detail, kamar, tipe_kamar WHERE kamar.id_kamar=transaksi_kamar_detail.id_kamar && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
+    $room = mysqli_query($conn, "SELECT kamar.id_kamar, tipe_kamar.harga_per_mlm FROM transaksi_kamar_detail, kamar, tipe_kamar WHERE kamar.id_kamar=transaksi_kamar_detail.id_kamar && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar && transaksi_kamar_detail.id_transaksi_kamar='$id_transaksi'");
     $total_biaya = 0;
     
     foreach($room as $r){
