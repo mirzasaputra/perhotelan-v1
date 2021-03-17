@@ -152,34 +152,50 @@ if($_GET['cetak'] == 'transaksi_kamar') :
     $pdf->cell(10, 0.7, 'Printed on : ' . date('D, d M Y'), 0, 1, 'L');
     $pdf->ln(.2);
     $pdf->cell(19, 0.7, 'Room transaction report for the month ' . $monthList[$month] . ' ' . $years, 0, 1, 'L');
-    $pdf->setX(2);
-    $pdf->setFont('arial', 'B', 11);
-    $pdf->cell(1, 1, 'No.', 1, 0, 'C');
-    $pdf->cell(5, 1, 'Date Transaction', 1, 0, 'C');
-    $pdf->cell(6, 1, 'No. Invoice', 1, 0, 'C');
-    $pdf->cell(5, 1, 'Total cost', 1, 1, 'C');
+    $pdf->setX(1);
+    $pdf->setFont('arial', 'B', 8);
+    $pdf->cell(.8, 1, 'No.', 1, 0, 'C');
+    $pdf->cell(2.7, 1, 'Date Transaction', 1, 0, 'C');
+    $pdf->cell(3, 1, 'No. Invoice', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Total cost', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Total cost', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Total cost', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Total cost', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Total cost', 1, 1, 'C');
 
     $query = mysqli_query($conn, "SELECT * FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years'");
     $no = 1;
 
     foreach($query as $i) :
 
-        $pdf->setX(2);
-        $pdf->setFont('arial', '', 10);
-        $pdf->cell(1, 0.85, '  ' . $no++ . '.', 1, 0, 'L');
-        $pdf->cell(5, 0.85, '  ' . $i['tanggal'], 1, 0, 'L');
-        $pdf->cell(6, 0.85, '  ' . $i['no_invoice'], 1, 0, 'L');
-        $pdf->cell(5, 0.85, '  Rp.' . number_format($i['total_biaya_kamar'], 0, ',', '.'), 1, 1, 'L');
+        $pdf->setX(1);
+        $pdf->setFont('arial', '', 7);
+        $pdf->cell(.8, 0.85, '  ' . $no++ . '.', 1, 0, 'L');
+        $pdf->cell(2.7, 0.85, '  ' . $i['tanggal'], 1, 0, 'L');
+        $pdf->cell(3, 0.85, '  ' . $i['no_invoice'], 1, 0, 'L');
+        $pdf->cell(2.5, 0.85, ' Rp.' . number_format($i['total_biaya_kamar'], 0, ',', '.'), 1, 0, 'L');
+        $pdf->cell(2.5, 0.85, ($i['metode_deposit'] == 'cash') ? ' Rp.' . number_format($i['deposit'], 0, ',', '.') : '', 1, 0, 'L');
+        $pdf->cell(2.5, 0.85, ($i['metode_deposit'] == 'transfer') ? ' Rp.' . number_format($i['deposit'], 0, ',', '.') : '', 1, 0, 'L');
+        $pdf->cell(2.5, 0.85, ($i['metode_pembayaran'] == 'cash') ? ' Rp.' . number_format($i['bayar'], 0, ',', '.') : '', 1, 0, 'L');
+        $pdf->cell(2.5, 0.85, ($i['metode_pembayaran'] == 'transfer') ? ' Rp.' . number_format($i['bayar'], 0, ',', '.') : '', 1, 1, 'L');
 
     endforeach;
 
+    
+    $pdf->setX(1);
+    $pdf->setFont('arial', 'B', 8);
+    $pdf->cell(3.5, 1, '', 0, 0, 'L');
+    $pdf->cell(3, 1, '  Total Income', 1, 0, 'L');
     $query = mysqli_query($conn, "SELECT SUM(total_biaya_kamar) as total FROM transaksi_kamar");$total = mysqli_fetch_array($query);
-
-    $pdf->setX(2);
-    $pdf->setFont('arial', 'B', 11);
-    $pdf->cell(6, 1, '', 0, 0, 'L');
-    $pdf->cell(6, 1, '  Total Income', 1, 0, 'L');
-    $pdf->cell(5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 1, 'L');
+    $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
+    $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE metode_deposit='cash'");$total = mysqli_fetch_array($query);
+    $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
+    $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE metode_deposit='transfer'");$total = mysqli_fetch_array($query);
+    $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
+    $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE metode_pembayaran='cash'");$total = mysqli_fetch_array($query);
+    $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
+    $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE metode_pembayaran='transfer'");$total = mysqli_fetch_array($query);
+    $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 1, 'L');
 
 endif;
 
@@ -534,8 +550,11 @@ if($_GET['cetak'] == 'invoice') :
     
     $pdf->setXY(1, 14);
     $pdf->cell(11, 0.6, 'Fasilitas : ', 0, 1);
-    foreach($_SESSION['fasilitas_'. $id] as $f) {
-        $pdf->cell(11, 0.3, '*'. $f, 0, 1);
+
+    if(isset($_SESSION['fasilitas_'. $id])){
+        foreach($_SESSION['fasilitas_'. $id] as $f) {
+            $pdf->cell(11, 0.3, '*'. $f, 0, 1);
+        }
     }
 
 endif;

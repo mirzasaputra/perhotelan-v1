@@ -276,9 +276,9 @@ if($qty == 0){
                             icon: 'success',
                             text: data.pesan
                         }).then(function(){
-                            window.location.assign('?module=chek_out_add&id=<?=$id;?>');
+                            window.location.reload();
                         });
-                        setInterval(function(){window.location.assign('?module=chek_out_add&id=<?=$id;?>');}, 3000);
+                        setInterval(function(){window.location.reload();}, 3000);
                     }
                 }
             });

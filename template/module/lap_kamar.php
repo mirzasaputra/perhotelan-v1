@@ -68,6 +68,10 @@ $years_start = date('Y') - 10;
                             <th>Date Transaction</th>
                             <th>No. Invoice</th>
                             <th>Total Cost</th>
+                            <th>DP Cast</th>
+                            <th>DP Transfer</th>
+                            <th>Paid Cash</th>
+                            <th>Paid Transfer</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,15 +81,27 @@ $years_start = date('Y') - 10;
                             <td><?=$i['tanggal'];?></td>
                             <td><?=$i['no_invoice'];?></td>
                             <td>Rp. <?=number_format($i['total_biaya_kamar'], 0, ',', '.');?></td>
+                            <td><?=($i['metode_deposit'] == 'cash') ? 'Rp. '. number_format($i['deposit'], 0, ',', '.') : '';?></td>
+                            <td><?=($i['metode_deposit'] == 'transfer') ? 'Rp. '. number_format($i['deposit'], 0, ',', '.') : '';?></td>
+                            <td><?=($i['metode_pembayaran'] == 'cash') ? 'Rp. '. number_format($i['bayar'], 0, ',', '.') : '';?></td>
+                            <td><?=($i['metode_pembayaran'] == 'transfer') ? 'Rp.'. number_format($i['bayar'], 0, ',', '.') : '';?></td>
                         </tr>
                         <?php endforeach;?> 
                         <?php $query = mysqli_query($conn, "SELECT SUM(total_biaya_kamar) as total FROM transaksi_kamar");$total = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE metode_deposit='cash'");$deposit_cash = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE metode_deposit='transfer'");$deposit_tf = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(bayar) as bayar FROM transaksi_kamar WHERE metode_pembayaran='cash'");$bayar_cash = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(bayar) as bayar FROM transaksi_kamar WHERE metode_pembayaran='transfer'");$bayar_tf = mysqli_fetch_array($query);?>
                     </tbody>
                     <tfooter>
                         <tr>
                             <th colspan="2" class="border-top bg-white"></th>
                             <th class="border bg-white">Total Income</th>
                             <th class="border bg-white">Rp. <?=number_format($total['total'], 0, ',', '.');?></th>
+                            <th class="border bg-white">Rp. <?=number_format($deposit_cash['deposit'], 0, ',', '.');?></th>
+                            <th class="border bg-white">Rp. <?=number_format($deposit_tf['deposit'], 0, ',', '.');?></th>
+                            <th class="border bg-white">Rp. <?=number_format($bayar_cash['bayar'], 0, ',', '.');?></th>
+                            <th class="border bg-white">Rp. <?=number_format($bayar_tf['bayar'], 0, ',', '.');?></th>
                         </tr>
                     </tfooter>
                 </table>    
