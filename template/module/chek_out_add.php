@@ -186,14 +186,14 @@ if($qty == 0){
                             </th>
                         </tr>
                         <tr align="center">
-                            <th>Total</th>
-                            <th id="totalView">Rp. <?=number_format($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']), 0, ',', '.');?></th>
-                            <input type="hidden" value="<?=$i['surcharge'];?>" id="surchargeVal">
-                        </tr>
-                        <tr align="center">
                             <th>21% Tax + Service</th>
                             <th id="taxService">Rp. <?=number_format($total * 0.21, 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$total * 0.21;?>" id="taxServiceVal">
+                        </tr>
+                        <tr align="center">
+                            <th>Total</th>
+                            <th id="totalView">Rp. <?=number_format(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) + ($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) * 0.21, 0, ',', '.');?></th>
+                            <input type="hidden" value="<?=$i['surcharge'];?>" id="surchargeVal">
                         </tr>
                         <tr align="center">
                             <th>Down Payment</th>
@@ -388,11 +388,11 @@ if($qty == 0){
 
         
         //set total
-        total = parseInt(total) - parseInt(jumlah);
+        total = parseInt(total) - parseInt(jumlah)  + parseInt(taxService);
         $('#totalView').html('Rp. '+ rupiah(total));
             
         //set grand total
-        total = (parseInt(total) + parseInt(surcharge) + parseInt(taxService)) - parseInt(deposit);
+        total = (parseInt(total) + parseInt(surcharge)) - parseInt(deposit);
         $('.grandTotal').html('Rp. '+ rupiah(total));
         $('#grandTotal').val(total);
     }
