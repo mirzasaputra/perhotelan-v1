@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 17, 2021 at 11:06 AM
+-- Generation Time: Mar 18, 2021 at 12:26 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.3.22
 
@@ -111,10 +111,10 @@ CREATE TABLE `kamar` (
 --
 
 INSERT INTO `kamar` (`id_kamar`, `no_kamar`, `id_tipe_kamar`, `max_dewasa`, `max_anak`, `status`) VALUES
-(1, '100', '1', '2', '2', 'Tersedia'),
+(1, '100', '1', '2', '2', 'kotor'),
 (2, '101', '1', '2', '2', 'Terpakai'),
 (3, '102', '1', '2', '2', 'Tersedia'),
-(4, '103', '1', '2', '2', 'Tersedia'),
+(4, '103', '1', '2', '2', 'Terpakai'),
 (5, '104', '2', '2', '2', 'kotor');
 
 -- --------------------------------------------------------
@@ -360,6 +360,7 @@ CREATE TABLE `transaksi_kamar` (
   `diskon` int(11) NOT NULL,
   `deposit` varchar(20) NOT NULL,
   `surcharge` varchar(30) NOT NULL,
+  `total` int(11) NOT NULL,
   `metode_pembayaran` varchar(100) NOT NULL,
   `metode_deposit` varchar(200) NOT NULL,
   `status` varchar(50) NOT NULL
@@ -369,8 +370,9 @@ CREATE TABLE `transaksi_kamar` (
 -- Dumping data for table `transaksi_kamar`
 --
 
-INSERT INTO `transaksi_kamar` (`id_transaksi_kamar`, `no_invoice`, `tanggal`, `id_tamu`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`, `tgl_checkin`, `waktu_checkin`, `tgl_checkout`, `waktu_checkout`, `total_biaya_kamar`, `bayar`, `diskon`, `deposit`, `surcharge`, `metode_pembayaran`, `metode_deposit`, `status`) VALUES
-('ID9078843', 'INV-12212172-46', '2021-03-17', 'ID27538', NULL, NULL, NULL, '2021-03-17', '16:16', '2021-03-19', '12:00', '800000', '970000', 0, '150000', '150000', 'cash', 'transfer', 'check out');
+INSERT INTO `transaksi_kamar` (`id_transaksi_kamar`, `no_invoice`, `tanggal`, `id_tamu`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`, `tgl_checkin`, `waktu_checkin`, `tgl_checkout`, `waktu_checkout`, `total_biaya_kamar`, `bayar`, `diskon`, `deposit`, `surcharge`, `total`, `metode_pembayaran`, `metode_deposit`, `status`) VALUES
+('ID2401924', 'INV-5179659-2', '2021-03-17', 'ID27538', NULL, NULL, NULL, '2021-03-17', '18:17', '2021-03-18', '12:00', '400000', '384000', 0, '100000', '', 484000, 'transfer', 'transfer', 'check out'),
+('ID8541574', 'INV-41571741-32', '2021-03-17', 'ID27538', NULL, NULL, NULL, '2021-03-17', '18:14', '2021-03-19', '12:00', '600000', '626000', 0, '100000', '', 726000, 'cash', 'cash', 'check out');
 
 -- --------------------------------------------------------
 
@@ -391,8 +393,10 @@ CREATE TABLE `transaksi_kamar_detail` (
 --
 
 INSERT INTO `transaksi_kamar_detail` (`id_transaksi_kamar_detail`, `id_transaksi_kamar`, `id_kamar`, `jumlah_anak`, `jumlah_dewasa`) VALUES
-(10, 'ID9078843', 5, 1, 2),
-(11, 'ID9078843', 2, 0, 2);
+(14, 'ID8541574', 1, 0, 2),
+(15, 'ID8541574', 2, 0, 1),
+(16, 'ID2401924', 5, 1, 2),
+(17, 'ID2401924', 4, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -637,7 +641,7 @@ ALTER TABLE `tipe_kamar`
 -- AUTO_INCREMENT for table `transaksi_kamar_detail`
 --
 ALTER TABLE `transaksi_kamar_detail`
-  MODIFY `id_transaksi_kamar_detail` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_transaksi_kamar_detail` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `transaksi_laundry`
