@@ -194,6 +194,7 @@ if($qty == 0){
                             <th>Total</th>
                             <th id="totalView">Rp. <?=number_format(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) + ($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) * 0.21, 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$i['surcharge'];?>" id="surchargeVal">
+                            <input type="hidden" name="inputTotal" id="inputTotal" value="<?=($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) + ($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) * 0.21;?>">
                         </tr>
                         <tr align="center">
                             <th>Down Payment</th>
@@ -390,6 +391,7 @@ if($qty == 0){
         //set total
         total = parseInt(total) - parseInt(jumlah)  + parseInt(taxService);
         $('#totalView').html('Rp. '+ rupiah(total));
+        $('#inputTotal').val(total);
             
         //set grand total
         total = (parseInt(total) + parseInt(surcharge)) - parseInt(deposit);

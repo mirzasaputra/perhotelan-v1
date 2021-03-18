@@ -158,12 +158,12 @@ if($_GET['cetak'] == 'transaksi_kamar') :
     $pdf->cell(2.7, 1, 'Date Transaction', 1, 0, 'C');
     $pdf->cell(3, 1, 'No. Invoice', 1, 0, 'C');
     $pdf->cell(2.5, 1, 'Total cost', 1, 0, 'C');
-    $pdf->cell(2.5, 1, 'Total cost', 1, 0, 'C');
-    $pdf->cell(2.5, 1, 'Total cost', 1, 0, 'C');
-    $pdf->cell(2.5, 1, 'Total cost', 1, 0, 'C');
-    $pdf->cell(2.5, 1, 'Total cost', 1, 1, 'C');
+    $pdf->cell(2.5, 1, 'Dp Cash', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Dp Transfer', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Paid Cash', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Paid Transfer', 1, 1, 'C');
 
-    $query = mysqli_query($conn, "SELECT * FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years'");
+    $query = mysqli_query($conn, "SELECT * FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && status='check out'");
     $no = 1;
 
     foreach($query as $i) :
@@ -173,7 +173,7 @@ if($_GET['cetak'] == 'transaksi_kamar') :
         $pdf->cell(.8, 0.85, '  ' . $no++ . '.', 1, 0, 'L');
         $pdf->cell(2.7, 0.85, '  ' . $i['tanggal'], 1, 0, 'L');
         $pdf->cell(3, 0.85, '  ' . $i['no_invoice'], 1, 0, 'L');
-        $pdf->cell(2.5, 0.85, ' Rp.' . number_format($i['total_biaya_kamar'], 0, ',', '.'), 1, 0, 'L');
+        $pdf->cell(2.5, 0.85, ' Rp.' . number_format($i['total'], 0, ',', '.'), 1, 0, 'L');
         $pdf->cell(2.5, 0.85, ($i['metode_deposit'] == 'cash') ? ' Rp.' . number_format($i['deposit'], 0, ',', '.') : '', 1, 0, 'L');
         $pdf->cell(2.5, 0.85, ($i['metode_deposit'] == 'transfer') ? ' Rp.' . number_format($i['deposit'], 0, ',', '.') : '', 1, 0, 'L');
         $pdf->cell(2.5, 0.85, ($i['metode_pembayaran'] == 'cash') ? ' Rp.' . number_format($i['bayar'], 0, ',', '.') : '', 1, 0, 'L');
@@ -559,5 +559,15 @@ if($_GET['cetak'] == 'invoice') :
 
 endif;
 
+if($_GET['cetak'] !== 'invoice'){
+    $user = $_SESSION['user'];
+    $pass = $_SESSION['pass'];
+    $dataUser = mysqli_query($conn, "SELECT * FROM user WHERE username='$user' && password='$pass'");
+    $dataUser = mysqli_fetch_array($dataUser);
+    
+    $pdf->cell(5, 2, '', 0, 1, 'C');
+    $pdf->cell(5, 2, 'Prepared By', 0, 1, 'C');
+    $pdf->cell(5, 2, '('. $dataUser['nama_user'] .')', 0, 1, 'C');
+}
 
 $pdf->Output("Laporan.pdf", "I");
