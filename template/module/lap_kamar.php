@@ -87,7 +87,7 @@ $years_start = date('Y') - 10;
                             <td><?=($i['metode_pembayaran'] == 'transfer') ? 'Rp.'. number_format($i['bayar'], 0, ',', '.') : '';?></td>
                         </tr>
                         <?php endforeach;?> 
-                        <?php $query = mysqli_query($conn, "SELECT SUM(total_biaya_kamar) as total FROM transaksi_kamar");$total = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(total) as total FROM transaksi_kamar");$total = mysqli_fetch_array($query);?>
                         <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE metode_deposit='cash'");$deposit_cash = mysqli_fetch_array($query);?>
                         <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE metode_deposit='transfer'");$deposit_tf = mysqli_fetch_array($query);?>
                         <?php $query = mysqli_query($conn, "SELECT SUM(bayar) as bayar FROM transaksi_kamar WHERE metode_pembayaran='cash'");$bayar_cash = mysqli_fetch_array($query);?>

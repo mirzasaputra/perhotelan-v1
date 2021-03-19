@@ -186,7 +186,7 @@ if($_GET['cetak'] == 'transaksi_kamar') :
     $pdf->setFont('arial', 'B', 8);
     $pdf->cell(3.5, 1, '', 0, 0, 'L');
     $pdf->cell(3, 1, '  Total Income', 1, 0, 'L');
-    $query = mysqli_query($conn, "SELECT SUM(total_biaya_kamar) as total FROM transaksi_kamar");$total = mysqli_fetch_array($query);
+    $query = mysqli_query($conn, "SELECT SUM(total) as total FROM transaksi_kamar");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
     $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE metode_deposit='cash'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
