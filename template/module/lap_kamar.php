@@ -80,7 +80,7 @@ $years_start = date('Y') - 10;
                             <td><?=$no++;?></td>
                             <td><?=$i['tanggal'];?></td>
                             <td><?=$i['no_invoice'];?></td>
-                            <td>Rp. <?=number_format($i['total_biaya_kamar'], 0, ',', '.');?></td>
+                            <td>Rp. <?=number_format($i['total'], 0, ',', '.');?></td>
                             <td><?=($i['metode_deposit'] == 'cash') ? 'Rp. '. number_format($i['deposit'], 0, ',', '.') : '';?></td>
                             <td><?=($i['metode_deposit'] == 'transfer') ? 'Rp. '. number_format($i['deposit'], 0, ',', '.') : '';?></td>
                             <td><?=($i['metode_pembayaran'] == 'cash') ? 'Rp. '. number_format($i['bayar'], 0, ',', '.') : '';?></td>
