@@ -192,9 +192,9 @@ if($qty == 0){
                         </tr>
                         <tr align="center">
                             <th>Total</th>
-                            <th id="totalView">Rp. <?=number_format(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) + ($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) * 0.21, 0, ',', '.');?></th>
+                            <th id="totalView">Rp. <?=number_format($total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge']), 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$i['surcharge'];?>" id="surchargeVal">
-                            <input type="hidden" name="inputTotal" id="inputTotal" value="<?=($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) + ($total + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) * 0.21;?>">
+                            <input type="hidden" name="inputTotal" id="inputTotal" value="<?=$total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge']);?>">
                         </tr>
                         <tr align="center">
                             <th>Down Payment</th>
@@ -203,7 +203,7 @@ if($qty == 0){
                         </tr>
                         <tr align="center">
                             <th>Grand Total</th>
-                            <th class="grandTotal <?php if(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format(($total - $i['diskon']) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit'], 0, ',', '.');?></th>
+                            <th class="grandTotal <?php if(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format($total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) - $i['deposit'], 0, ',', '.');?></th>
                         </tr>
                         <tr align="center">
                             <th>Payment Metode</th>
@@ -389,12 +389,12 @@ if($qty == 0){
 
         
         //set total
-        total = parseInt(total) - parseInt(jumlah)  + parseInt(taxService);
+        total = parseInt(total) - parseInt(jumlah)  + parseInt(taxService) + parseInt(surcharge);
         $('#totalView').html('Rp. '+ rupiah(total));
         $('#inputTotal').val(total);
             
         //set grand total
-        total = (parseInt(total) + parseInt(surcharge)) - parseInt(deposit);
+        total = (parseInt(total) - parseInt(deposit));
         $('.grandTotal').html('Rp. '+ rupiah(total));
         $('#grandTotal').val(total);
     }

@@ -44,7 +44,11 @@ if($_GET['act'] == 'chek_out'){
         $query = mysqli_query($conn, "UPDATE transaksi_kamar SET bayar='$bayar', diskon='$diskon', total='$inputTotal', metode_pembayaran='$metode', status='check out' WHERE id_transaksi_kamar='$id_transaksi'");
         
         if($query){
-            mysqli_query($conn, "UPDATE kamar SET status='kotor' WHERE id_kamar='$kamar'");
+            $kamar_detail = mysqli_query($conn ,"SELECT * FROM transaksi_kamar_detail WHERE id_transaksi_kamar='$id_transaksi'");    
+
+            foreach($kamar_detail as $i) {
+                mysqli_query($conn, "UPDATE kamar SET status='kotor' WHERE id_kamar='". $i['id_kamar'] . "'");
+            }
             $data['hasil'] = true;
             $data['pesan'] = 'Transaction Success';
         } else {

@@ -40,7 +40,7 @@ if(isset($_GET['check_in'])){
         $data['hasil'] = false;
         $data['pesan'] = 'Data Check Out Invalid';
     } else {
-        $query = mysqli_query($conn, "INSERT INTO transaksi_kamar VALUES('$id_transaksi', '$no_invoice', '$tgl', '$id_tamu', null, null, null, '$tgl_checkin', '$waktu_checkin', '$tgl_checkout', '$waktu_checkout', '$total_biaya', '', 0, '$deposit', '', '', '', '$metode', 'check in')");
+        $query = mysqli_query($conn, "INSERT INTO transaksi_kamar VALUES('$id_transaksi', '$no_invoice', '$tgl', '$id_tamu', null, null, null, '$tgl_checkin', '$waktu_checkin', '$tgl_checkout', '$waktu_checkout', '$total_biaya', '', 0, '$deposit', '', 0, '', '$metode', 'check in')");
 
         if($query){
             $data['hasil'] = true;

@@ -510,7 +510,7 @@ if($_GET['cetak'] == 'invoice') :
     
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  Total', 1, 0, 'L');
-    $pdf->cell(3, 0.8, '  Rp. ' . number_format(($total + $i['surcharge']) + ($total + $i['surcharge']) * 0.21, 0, ',', '.') . ',-', 1, 1, 'L');
+    $pdf->cell(3, 0.8, '  Rp. ' . number_format($total + ($total * 0.21) + $i['surcharge'] , 0, ',', '.') . ',-', 1, 1, 'L');
     
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(3, 0.8, '', 0, 0, 'L');
