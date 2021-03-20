@@ -490,11 +490,11 @@ if($_GET['cetak'] == 'invoice') :
     
     if(empty($c['total'])){$c['total'] = '0';} $a = mysqli_query($conn, "SELECT SUM(total) as total FROM pesanan WHERE id_transaksi_kamar='" . $i['id_transaksi_kamar'] . "' && status='Menunggu Pembayaran'");$b=mysqli_fetch_array($a);$total = $b['total'] + $i['total_biaya_kamar'] + $c['total'];
     $pdf->setFont('arial', 'B', 8);
+    $y = $pdf->getY();
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  Sub Total', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($total, 0, ',', '.') . ',-', 1, 1, 'L');
 
-    
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  Discount', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['diskon'], 0, ',', '.') . ',-', 1, 1, 'L');
@@ -538,17 +538,8 @@ if($_GET['cetak'] == 'invoice') :
         $pdf->cell(2, 0.8, '  Refund', 1, 0, 'L');
         $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'] - (($total - $i['diskon']) + $i['surcharge'] + ($total * 0.21) - $i['deposit']), 0, ',', '.') . ',-', 1, 1, 'L');
     }
-    
-    $user = $_SESSION['user'];
-    $pass = $_SESSION['pass'];
-    $dataUser = mysqli_query($conn, "SELECT * FROM user WHERE username='$user' && password='$pass'");
-    $dataUser = mysqli_fetch_array($dataUser);
 
-    $pdf->cell(5, 2, '', 0, 1, 'C');
-    $pdf->cell(5, 2, 'Prepared By', 0, 1, 'C');
-    $pdf->cell(5, 2, '('. $dataUser['nama_user'] .')', 0, 1, 'C');
-    
-    $pdf->setXY(1, 14);
+    $pdf->setY($y + 0.2);
     $pdf->cell(11, 0.6, 'Fasilitas : ', 0, 1);
 
     if(isset($_SESSION['fasilitas_'. $id])){
@@ -556,7 +547,15 @@ if($_GET['cetak'] == 'invoice') :
             $pdf->cell(11, 0.3, '*'. $f, 0, 1);
         }
     }
+    
+    $user = $_SESSION['user'];
+    $pass = $_SESSION['pass'];
+    $dataUser = mysqli_query($conn, "SELECT * FROM user WHERE username='$user' && password='$pass'");
+    $dataUser = mysqli_fetch_array($dataUser);
 
+    $pdf->cell(5, 3, '', 0, 1, 'C');
+    $pdf->cell(5, 2, 'Prepared By', 0, 1, 'C');
+    $pdf->cell(5, 2, '('. $dataUser['nama_user'] .')', 0, 1, 'C');
 endif;
 
 if($_GET['cetak'] !== 'invoice'){
