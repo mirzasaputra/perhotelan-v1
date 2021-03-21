@@ -415,15 +415,22 @@ if($_GET['cetak'] == 'transaksi_laundry') :
 endif;
 
 if($_GET['cetak'] == 'invoice') : 
-
-    $pdf->setFont('times', 'B', 14);
-    $pdf->cell(19, 0.3, 'Invoice', 0, 0, 'C');
-    $pdf->ln(1.5);
-    $pdf->setFont('times', 'B', 10);
-    
     $id = $_GET['id'];
     $query = mysqli_query($conn, "SELECT transaksi_kamar.*, tamu.* FROM tamu, transaksi_kamar WHERE transaksi_kamar.id_transaksi_kamar='$id' && tamu.id_tamu=transaksi_kamar.id_tamu");
     $i = mysqli_fetch_array($query);
+
+    if($i['status'] == 'check out'){
+        $pdf->setFont('times', 'B', 14);
+        $pdf->cell(19, 0.3, 'Bukti Pembayaran', 0, 0, 'C');
+        $pdf->ln(1.5);
+        $pdf->setFont('times', 'B', 10);    
+    } else {
+        $pdf->setFont('times', 'B', 14);
+        $pdf->cell(19, 0.3, 'Invoice', 0, 0, 'C');
+        $pdf->ln(1.5);
+        $pdf->setFont('times', 'B', 10);
+    }
+    
     
     $pdf->cell(10, 0.5, 'Addressed to : ', 0, 1, 'L');
     $pdf->cell(10, 0.5, $i['prefix'] . '. ' . $i['nama_depan'] . ' ' . $i['nama_belakang'], 0, 1, 'L');
@@ -516,11 +523,16 @@ if($_GET['cetak'] == 'invoice') :
     $pdf->cell(3, 0.8, '', 0, 0, 'L');
     $pdf->cell(2, 0.8, '  Dp', 1, 0, 'L');
     $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
+
+    $pdf->cell(11, 0.8, '', 0, 0, 'L');
+    $pdf->cell(3, 0.8, '', 0, 0, 'L');
+    $pdf->cell(2, 0.8, '  Dp Via', 1, 0, 'L');
+    $pdf->cell(3, 0.8, '  '. $i['metode_deposit'], 1, 1, 'L');
     
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(3, 0.8, '', 0, 0, 'L');
     $pdf->cell(2, 0.8, '  Grand Total', 1, 0, 'L');
-    $pdf->cell(3, 0.8, '  Rp. ' . number_format(($total - $i['diskon']) + $i['surcharge'] + ($total * 0.21) - $i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
+    $pdf->cell(3, 0.8, '  Rp. ' . number_format((($total + $i['surcharge'] + ($total * 0.21)) - $i['diskon']) - $i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
     
     if($i['bayar']){
         $pdf->cell(11, 0.8, '', 0, 0, 'L');

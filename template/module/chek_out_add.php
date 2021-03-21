@@ -203,7 +203,7 @@ if($qty == 0){
                         </tr>
                         <tr align="center">
                             <th>Grand Total</th>
-                            <th class="grandTotal <?php if(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format($total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) - $i['deposit'], 0, ',', '.');?></th>
+                            <th class="grandTotal <?php if(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format((($total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) - $i['diskon']) - $i['deposit'], 0, ',', '.');?></th>
                         </tr>
                         <tr align="center">
                             <th>Payment Metode</th>
@@ -211,8 +211,8 @@ if($qty == 0){
                         </tr>
                         <tr align="center">
                             <th>Pay</th>
-                            <input type="hidden" name="total" id="grandTotal" value="<?=$total + $i['surcharge'] + ($total * 0.21) - $i['deposit'];?>">
-                            <th><?=($i['bayar'] > 0) ? 'Rp. '. $i['bayar'] : '<input type="text" name="bayar" id="pay" class="form-control" placeholder="Bayar..." required autocomplete="off">'; ?></th>
+                            <input type="hidden" name="total" id="grandTotal" value="<?=(($total + $i['surcharge'] + ($total * 0.21)) - $i['diskon']) - $i['deposit'];?>">
+                            <th><?=($i['bayar'] > 0) ? 'Rp. '. number_format($i['bayar'], 0, ',', '.') : '<input type="text" name="bayar" id="pay" class="form-control" placeholder="Bayar..." required autocomplete="off">'; ?></th>
                         </tr>
                         <tr align="center">
                             <th>Refund</th>
