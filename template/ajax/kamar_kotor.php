@@ -23,7 +23,7 @@ $query = mysqli_query($conn, "SELECT kamar.*, tipe_kamar.* FROM kamar, tipe_kama
                                     <span style="font-family: times;font-size: 20px"><?=$i['tipe_kamar'];?></span>
                                 </div>
                             </div>
-                            <a class="card-footer clearfix z-1 p-1 text-center text-white" id="update" value="<?=$i['id_kamar'];?>" href="#myModal" data-toggle="modal">Update</a>
+                            <a class="card-footer clearfix z-1 p-1 text-center text-white update" id="update" value="<?=$i['id_kamar'];?>" href="#myModal" data-toggle="modal">Update</a>
                         </div>
                     </div>
                 <?php endforeach;endif;if(mysqli_num_rows($query) <= 0) : ?>

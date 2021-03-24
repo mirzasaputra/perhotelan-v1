@@ -192,7 +192,7 @@ if($qty == 0){
                         </tr>
                         <tr align="center">
                             <th>Total</th>
-                            <th id="totalView">Rp. <?=number_format($total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge']), 0, ',', '.');?></th>
+                            <th id="totalView">Rp. <?=number_format($total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) - $i['diskon'], 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$i['surcharge'];?>" id="surchargeVal">
                             <input type="hidden" name="inputTotal" id="inputTotal" value="<?=$total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge']);?>">
                         </tr>

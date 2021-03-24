@@ -11,7 +11,7 @@
             $.get('template/ajax/kamar_kotor.php', function(data){
                 $('#viewData').html(data);
 
-               $('#update').click(function(){
+               $('.update').click(function(){
                    let id = $(this).attr('value');
                    $('#id').val(id);
                    $('#formModal').submit(function(e){
