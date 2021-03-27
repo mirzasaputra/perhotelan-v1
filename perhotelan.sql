@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 18, 2021 at 12:26 PM
+-- Generation Time: Mar 27, 2021 at 12:22 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.3.22
 
@@ -20,6 +20,51 @@ SET time_zone = "+00:00";
 --
 -- Database: `perhotelan`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking`
+--
+
+CREATE TABLE `booking` (
+  `id_booking` varchar(15) NOT NULL,
+  `id_tamu` varchar(15) NOT NULL,
+  `tgl_booking` date NOT NULL,
+  `tgl_check_in` date NOT NULL,
+  `waktu_check_in` varchar(12) NOT NULL,
+  `tgl_checkout` date NOT NULL,
+  `waktu_checkout` varchar(12) NOT NULL,
+  `status` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `booking`
+--
+
+INSERT INTO `booking` (`id_booking`, `id_tamu`, `tgl_booking`, `tgl_check_in`, `waktu_check_in`, `tgl_checkout`, `waktu_checkout`, `status`) VALUES
+('ID478440', 'ID27538', '2021-03-27', '2021-03-29', '12:00', '2021-03-31', '12:00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking_detail`
+--
+
+CREATE TABLE `booking_detail` (
+  `id_booking_detail` int(11) NOT NULL,
+  `id_booking` varchar(15) NOT NULL,
+  `id_kamar` int(11) NOT NULL,
+  `jumlah_dewasa` int(11) NOT NULL,
+  `jumlah_anak` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `booking_detail`
+--
+
+INSERT INTO `booking_detail` (`id_booking_detail`, `id_booking`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`) VALUES
+(4, 'ID478440', 2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -114,7 +159,7 @@ INSERT INTO `kamar` (`id_kamar`, `no_kamar`, `id_tipe_kamar`, `max_dewasa`, `max
 (1, '100', '1', '2', '2', 'kotor'),
 (2, '101', '1', '2', '2', 'Terpakai'),
 (3, '102', '1', '2', '2', 'Tersedia'),
-(4, '103', '1', '2', '2', 'Terpakai'),
+(4, '103', '1', '2', '2', 'Tersedia'),
 (5, '104', '2', '2', '2', 'kotor');
 
 -- --------------------------------------------------------
@@ -334,8 +379,8 @@ CREATE TABLE `tipe_kamar` (
 --
 
 INSERT INTO `tipe_kamar` (`id_tipe_kamar`, `tipe_kamar`, `harga_per_mlm`, `harga_per_org`) VALUES
-(1, 'Standart', '150000', '70000'),
-(2, 'VVIP', '250000', '200000');
+(1, 'Standart', '600000', '300000'),
+(2, 'VVIP', '2000000', '1000000');
 
 -- --------------------------------------------------------
 
@@ -371,7 +416,11 @@ CREATE TABLE `transaksi_kamar` (
 --
 
 INSERT INTO `transaksi_kamar` (`id_transaksi_kamar`, `no_invoice`, `tanggal`, `id_tamu`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`, `tgl_checkin`, `waktu_checkin`, `tgl_checkout`, `waktu_checkout`, `total_biaya_kamar`, `bayar`, `diskon`, `deposit`, `surcharge`, `total`, `metode_pembayaran`, `metode_deposit`, `status`) VALUES
+('ID179753', 'INV-83315152-29', '2021-03-24', 'ID27538', NULL, NULL, NULL, '2021-03-24', '22:48', '2021-03-25', '12:00', '2600000', '2426000', 520000, '300000', '100000', 2726000, 'cash', 'cash', 'check out'),
+('ID1849285', 'INV-49670515-19', '2021-03-27', 'ID27538', NULL, NULL, NULL, '2021-03-27', '17:39', '2021-03-31', '12:00', '2400000', '', 0, '100000', '', 0, '', 'cash', 'check in'),
 ('ID2401924', 'INV-5179659-2', '2021-03-17', 'ID27538', NULL, NULL, NULL, '2021-03-17', '18:17', '2021-03-18', '12:00', '400000', '384000', 0, '100000', '', 484000, 'transfer', 'transfer', 'check out'),
+('ID2765778', 'INV-43855836-76', '2021-03-20', 'ID27538', NULL, NULL, NULL, '2021-03-20', '22:22', '2021-03-22', '12:00', '1700000', '1787000', 170000, '200000', '100000', 1987000, 'cash', 'cash', 'check out'),
+('ID3614002', 'INV-30548740-62', '2021-03-19', 'ID27538', NULL, NULL, NULL, '2021-03-19', '18:24', '2021-03-21', '12:00', '300000', '413000', 0, '100000', '150000', 513000, 'cash', 'cash', 'check out'),
 ('ID8541574', 'INV-41571741-32', '2021-03-17', 'ID27538', NULL, NULL, NULL, '2021-03-17', '18:14', '2021-03-19', '12:00', '600000', '626000', 0, '100000', '', 726000, 'cash', 'cash', 'check out');
 
 -- --------------------------------------------------------
@@ -396,7 +445,16 @@ INSERT INTO `transaksi_kamar_detail` (`id_transaksi_kamar_detail`, `id_transaksi
 (14, 'ID8541574', 1, 0, 2),
 (15, 'ID8541574', 2, 0, 1),
 (16, 'ID2401924', 5, 1, 2),
-(17, 'ID2401924', 4, 0, 2);
+(17, 'ID2401924', 4, 0, 2),
+(18, 'ID3614002', 3, 1, 2),
+(19, 'ID2765778', 1, 0, 2),
+(20, 'ID2765778', 2, 1, 2),
+(21, 'ID2765778', 3, 0, 2),
+(22, 'ID2765778', 4, 2, 2),
+(23, 'ID2765778', 5, 2, 2),
+(24, 'ID179753', 1, 0, 2),
+(25, 'ID179753', 5, 1, 2),
+(26, 'ID1849285', 2, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -470,6 +528,18 @@ INSERT INTO `user` (`id_user`, `nama_user`, `image`, `username`, `password`, `le
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `booking`
+--
+ALTER TABLE `booking`
+  ADD PRIMARY KEY (`id_booking`);
+
+--
+-- Indexes for table `booking_detail`
+--
+ALTER TABLE `booking_detail`
+  ADD PRIMARY KEY (`id_booking_detail`);
 
 --
 -- Indexes for table `fasilitas`
@@ -578,6 +648,12 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `booking_detail`
+--
+ALTER TABLE `booking_detail`
+  MODIFY `id_booking_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `fasilitas`
 --
 ALTER TABLE `fasilitas`
@@ -641,7 +717,7 @@ ALTER TABLE `tipe_kamar`
 -- AUTO_INCREMENT for table `transaksi_kamar_detail`
 --
 ALTER TABLE `transaksi_kamar_detail`
-  MODIFY `id_transaksi_kamar_detail` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_transaksi_kamar_detail` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `transaksi_laundry`
