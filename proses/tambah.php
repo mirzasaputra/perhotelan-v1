@@ -98,4 +98,35 @@ if(isset($_GET['room'])){
 
 }
 
+if(isset($_GET['booking'])){
+    //mengambil nilai variabel
+    $id = $_GET['id'];
+    $id_room = $_POST['room_id'];
+    $dewasa = $_POST['dewasa'];
+    $anak = $_POST['anak'];
+
+    $check_room = mysqli_query($conn, "SELECT * FROM kamar WHERE id_kamar='$id_room'");
+    $check_room = mysqli_fetch_array($check_room);
+    
+    if($dewasa > $check_room['max_dewasa'] || $anak > $check_room['max_anak']){
+        $data['pesan'] = 'Maaf jumlah maximum tamu dewasa atau anak melebihi batas';
+    } else {
+        $check = mysqli_query($conn, "SELECT * FROM booking_detail WHERE id_kamar='$id_room' && id_booking='$id'");
+    
+        if(mysqli_num_rows($check) > 0){
+            $data['pesan'] = 'Room sudah ada dalam daftar';
+        } else {
+            $query = mysqli_query($conn,  "INSERT INTO booking_detail VALUES(null, '$id', '$id_room', '$dewasa', '$anak')");
+        
+            if($query){
+                $data['hasil'] = true;
+                $data['pesan'] = "Room Success Added";
+            } else {
+                $data['pesan'] = mysqli_error($conn);
+            }
+        }
+    }
+
+}
+
 echo json_encode($data);

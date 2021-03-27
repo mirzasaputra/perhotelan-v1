@@ -3,12 +3,6 @@ $id = $_GET['id'];
 $query = mysqli_query($conn, "SELECT * FROM tamu");
 $tamu = mysqli_query($conn, "SELECT * FROM tamu WHERE id_tamu='$id'");
 $tamu = mysqli_fetch_array($tamu);
-
-if(isset($_GET['id_booking'])){
-    $id_booking = $_GET['id_booking'];
-    $booking = mysqli_query($conn, "SELECT * FROM booking WHERE id_booking='$id_booking'");
-    $b = mysqli_fetch_assoc($booking);
-}
 ?>
 <div class="container-fluid">
 
@@ -32,19 +26,12 @@ if(isset($_GET['id_booking'])){
                         </div>
                     </div>
                     <div class="col-sm-6 pl-4">
-                    <form action="proses/chek_in.php?check_in" method="post" id="formChekIn">
+                    <form action="proses/booking.php" method="post" id="formChekIn">
                     <div class="form-group">
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <label>No. Invoice</label>
-                                    <input type="hidden" name="id_transaksi" value="<?=$_GET['id_transaksi'];?>">
-                                    <input type="text" class="form-control" name="no_invoice" value="<?='INV-' . rand(1, 99999999) . '-' . rand(1, 99);?>" readonly>
-                                    <?php if(isset($_GET['id_booking'])) : ?>
-                                        <input type="hidden" name="id_booking" value="<?=$_GET['id_booking'];?>">
-                                    <?php endif;?>
-                                </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <label>Guest Name</label>
+                                    <input type="hidden" name="id_booking" value="<?=$_GET['id_booking'];?>">
                                     <input type="hidden" name="tamu_id" value="<?=$id;?>">
                                     <input type="text" class="form-control" value="<?=$tamu['prefix'] .' '. $tamu['nama_depan'] .' '. $tamu['nama_belakang'];?>" readonly>
                                 </div>
@@ -54,11 +41,11 @@ if(isset($_GET['id_booking'])){
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label>Date / Time Check In</label>
-                                    <input type="text" class="form-control" name="tgl_chek_in" value="<?=$tgl->format('Y-m-d');?>" readonly>
+                                    <input type="date" class="form-control" name="tgl_chek_in" value="<?=$tgl->format('Y-m-d');?>">
                                 </div>
                                 <div class="col-sm-6 pt-2">
                                     <label></label>
-                                    <input type="text" class="form-control" name="waktu_chek_in" value="<?=$tgl->format('H:i');?>" readonly>
+                                    <input type="time" class="form-control" name="waktu_chek_in" value="12:00">
                                 </div>
                             </div>
                         </div>
@@ -66,15 +53,15 @@ if(isset($_GET['id_booking'])){
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label>Date / Time Check Out</label>
-                                    <input type="date" class="form-control" name="tgl_chek_out" <?=(isset($_GET['id_booking']) ? 'value="'. $b['tgl_checkout'] .'"' : '');?> required>
+                                    <input type="date" class="form-control" name="tgl_chek_out" required>
                                 </div>
                                 <div class="col-sm-6 pt-2">
                                     <label></label>
-                                    <input type="text" class="form-control" name="waktu_chek_out" placeholder="Time Chek Out" <?=(isset($_GET['id_booking']) ? 'value="'. $b['waktu_checkout'] .'"' : 'value="12:00"');?> required>
+                                    <input type="time" class="form-control" name="waktu_chek_out" value="12:00" placeholder="Time Chek Out" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label>Down Payment</label>
                             <input type="text" class="form-control" name="deposit" placeholder="Jumlah Deposit" required>
                             <i class="ml-2 text-muted small">*Enter numbers without periods(.). Exp : 90000</i>
@@ -83,7 +70,7 @@ if(isset($_GET['id_booking'])){
                             <label>Payment Metode</label><br>
                             <input type="radio" class="ml-2" name="metode" value="cash" id="cash"> <label for="cash">Cash</label>
                             <input type="radio" class="ml-4" name="metode" value="transfer" id="tf"> <label for="tf">Trasfer</label>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="form-group">
@@ -105,7 +92,7 @@ if(isset($_GET['id_booking'])){
             var id = $('#viewDataRoom').data('id');
 
             $.ajax({
-                url: '<?=(isset($_GET['id_booking']) ? 'template/ajax/data_booking_room.php?id=' : 'template/ajax/data_room.php?id=');?>'+ id +'&&<?=(isset($_GET['id_booking']) ? 'id_booking='. $_GET['id_booking'] : 'id_transaksi='. $_GET['id_transaksi']);?>',
+                url: 'template/ajax/data_booking_room.php?id='+ id +'&&id_booking=<?=$_GET['id_booking'];?>',
                 dataType: 'html',
                 success: function(data){
                     $('#viewDataRoom').html(data);
@@ -147,7 +134,7 @@ if(isset($_GET['id_booking'])){
 
                         if(toggle == 'delete'){
                             $.ajax({
-                                url: 'proses/hapus.php?hapus=transaksi_kamar_detail&&id='+ id,
+                                url: 'proses/hapus.php?hapus=booking_detail&&id='+ id,
                                 dataType: 'json',
                                 success: function(data){
                                     if(data.hasil == true){

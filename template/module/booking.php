@@ -10,7 +10,6 @@
 
     <div class="card bg-light">
         <div class="card-header">
-            <a href="?module=select_booking" class="btn btn-primary float-right"><i class="fas fa-list"></i> Select From Booking</a>
             <h3><i class="fas fa-bed pr-3 pl-2"></i> Guest - <span class="small">Select guest</span></h3>
         </div>
         <div class="card-body">
@@ -26,7 +25,7 @@
                             <span style="font-family: times;font-size: 20px">No. Identitas <?=$i['no_identitas'];?></span>
                             </div>
                         </div>
-                        <a href="?module=chek_in_add&&id=<?=$i['id_tamu'];?>&&id_transaksi=ID<?=rand(0, 9999999);?>" class="card-footer text-center text-white clearfix z-1 p-1">Select Guest</a>
+                        <a href="?module=booking_add&&id=<?=$i['id_tamu'];?>&&id_booking=ID<?=rand(0, 9999999);?>" class="card-footer text-center text-white clearfix z-1 p-1">Select Guest</a>
                     </div>
                 </div>
                 <?php endforeach; ?>

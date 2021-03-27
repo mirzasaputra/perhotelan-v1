@@ -27,6 +27,17 @@ if(isset($_GET['check_in'])){
         $inap = 1;
     }
 
+    if(isset($_POST['id_booking'])){
+        $id_booking = $_POST['id_booking'];
+        $booking = mysqli_query($conn, "SELECT * FROM booking_detail WHERE id_booking='$id_booking'");
+
+        foreach($booking as $bo){
+            mysqli_query($conn, "INSERT INTO transaksi_kamar_detail VALUES(null, '$id_transaksi', '". $bo['id_kamar'] ."', '". $bo['jumlah_anak'] ."', '". $bo['jumlah_dewasa'] ."')");
+        }
+
+        mysqli_query($conn, "UPDATE booking SET status=0 WHERE id_booking='$id_booking'");
+    }
+
     $room = mysqli_query($conn, "SELECT kamar.id_kamar, tipe_kamar.harga_per_mlm FROM transaksi_kamar_detail, kamar, tipe_kamar WHERE kamar.id_kamar=transaksi_kamar_detail.id_kamar && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar && transaksi_kamar_detail.id_transaksi_kamar='$id_transaksi'");
     $total_biaya = 0;
     

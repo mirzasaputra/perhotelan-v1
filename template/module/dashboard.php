@@ -1,6 +1,6 @@
 <?php
 $per_hal = 5;
-$jumlah = mysqli_query($conn, "SELECT * FROM transaksi_kamar");
+$jumlah = mysqli_query($conn, "SELECT * FROM transaksi_kamar WHERE status='check in'");
 $jumlah = mysqli_num_rows($jumlah);
 $halaman = ceil($jumlah / $per_hal);
 $page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
@@ -20,7 +20,7 @@ $start2 = ($page2 - 1) * $per_hal;
 
         <!--Icon Card-->
         <div class="row">
-            <div class="col-xl-4 col-sm-6 mb-4">
+            <div class="col-xl-3 col-sm-6 mb-4">
                 <div class="card text-white bg-primary o-hidden h-100">
                 <div class="card-body">
                   <div class="card-body-icon">
@@ -36,7 +36,7 @@ $start2 = ($page2 - 1) * $per_hal;
                 </a>
               </div>
             </div>
-            <div class="col-xl-4 col-sm-6 mb-4">
+            <div class="col-xl-3 col-sm-6 mb-4">
               <div class="card text-white bg-warning o-hidden h-100">
                 <div class="card-body">
                   <div class="card-body-icon">
@@ -52,7 +52,7 @@ $start2 = ($page2 - 1) * $per_hal;
                 </a>
               </div>
             </div>
-            <div class="col-xl-4 col-sm-6 mb-4">
+            <div class="col-xl-3 col-sm-6 mb-4">
               <div class="card text-white bg-danger o-hidden h-100">
                 <div class="card-body">
                   <div class="card-body-icon">
@@ -61,6 +61,22 @@ $start2 = ($page2 - 1) * $per_hal;
                   <div class="mr-5"><h2><?=$kotor;?></h2>Dirty Room</div>
                 </div>
                 <a class="card-footer text-white clearfix small z-1" href="?module=kamar_kotor">
+                  <span class="float-left">View Details</span>
+                  <span class="float-right">
+                    <i class="fas fa-angle-right"></i>
+                    </span>
+                </a>
+              </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-4">
+              <div class="card text-white bg-success o-hidden h-100">
+                <div class="card-body">
+                  <div class="card-body-icon">
+                    <i class="fas fa-fw fa-edit"></i>
+                  </div>
+                  <div class="mr-5"><h2>Booking</h2></div>
+                </div>
+                <a class="card-footer text-white clearfix small z-1" href="?module=booking">
                   <span class="float-left">View Details</span>
                   <span class="float-right">
                     <i class="fas fa-angle-right"></i>

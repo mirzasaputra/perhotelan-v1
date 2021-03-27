@@ -26,6 +26,7 @@
         <div class="collapse" id="chek-in-out">
           <ul>
             <li><a href="?module=chek_in" class="nav-livk">Check In</a></li>
+            <li><a href="?module=booking" class="nav-livk">Booking</a></li>
             <li><a href="?module=chek_out" class="nav-livk">Check Out</a></li>
           </ul>
         </div>

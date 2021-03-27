@@ -1,5 +1,5 @@
 <?php
-    $query = mysqli_query($conn, "SELECT * FROM tamu");
+    $query = mysqli_query($conn, "SELECT booking.*, tamu.* FROM booking, tamu WHERE tamu.id_tamu=booking.id_tamu && status=1");
 ?>
 <div class="container-fluid">
 
@@ -10,7 +10,7 @@
 
     <div class="card bg-light">
         <div class="card-header">
-            <a href="?module=select_booking" class="btn btn-primary float-right"><i class="fas fa-list"></i> Select From Booking</a>
+            <a href="?module=chek_in" class="btn btn-primary float-right"><i class="fas fa-list"></i> Select Guest</a>
             <h3><i class="fas fa-bed pr-3 pl-2"></i> Guest - <span class="small">Select guest</span></h3>
         </div>
         <div class="card-body">
@@ -23,10 +23,13 @@
                             <div class="card-body-icon"><i class="fas fa-user"></i></div>
                             <div class="mr-5">
                             <h3><?=$i['prefix'] .'. '. $i['nama_depan'] .' '. $i['nama_belakang'];?></h3>
-                            <span style="font-family: times;font-size: 20px">No. Identitas <?=$i['no_identitas'];?></span>
+                            <?php $date = date_create($i['tgl_booking']);?>
+                            <p class="m-0 p-0" style="font-family: times;font-size: 16px">Tgl Booking : <?=date_format($date, 'D, d M Y');?></p>
+                            <?php $date = date_create($i['tgl_check_in']);?>
+                            <p class="m-0 p-0" style="font-family: times;font-size: 16px">Tgl Check In : <?=date_format($date, 'D, d M Y');?></p>
                             </div>
                         </div>
-                        <a href="?module=chek_in_add&&id=<?=$i['id_tamu'];?>&&id_transaksi=ID<?=rand(0, 9999999);?>" class="card-footer text-center text-white clearfix z-1 p-1">Select Guest</a>
+                        <a href="?module=chek_in_add&&id=<?=$i['id_tamu'];?>&&id_transaksi=ID<?=rand(0, 9999999);?>&&id_booking=<?=$i['id_booking'];?>" class="card-footer text-center text-white clearfix z-1 p-1">Select Guest</a>
                     </div>
                 </div>
                 <?php endforeach; ?>
