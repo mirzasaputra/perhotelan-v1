@@ -213,19 +213,19 @@ if($_GET['cetak'] == 'transaksi_kamar') :
     $pdf->setFont('arial', 'B', 8);
     $pdf->cell(5, 1, '', 0, 0, 'L');
     $pdf->cell(5, 1, '  Total Income', 1, 0, 'L');
-    $query = mysqli_query($conn, "SELECT SUM(total) as total FROM transaksi_kamar");$total = mysqli_fetch_array($query);
+    $query = mysqli_query($conn, "SELECT SUM(total) as total FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && status='check out'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
-    $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE metode_deposit='cash'");$total = mysqli_fetch_array($query);
+    $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_deposit='cash' && status='check out'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
-    $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE metode_deposit='transfer'");$total = mysqli_fetch_array($query);
+    $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_deposit='transfer' && status='check out'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
-    $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE metode_deposit='EDC'");$total = mysqli_fetch_array($query);
+    $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_deposit='EDC' && status='check out'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
-    $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE metode_pembayaran='cash'");$total = mysqli_fetch_array($query);
+    $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_pembayaran='cash' && status='check out'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
-    $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE metode_pembayaran='transfer'");$total = mysqli_fetch_array($query);
+    $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_pembayaran='transfer' && status='check out'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
-    $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE metode_pembayaran='EDC'");$total = mysqli_fetch_array($query);
+    $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_pembayaran='EDC' && status='check out'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 1, 'L');
 
     $user = $_SESSION['user'];

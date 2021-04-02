@@ -53,7 +53,7 @@ $years_start = date('Y') - 10;
                 if($_GET['month'] !== 0) : 
                     $month = $_GET['month'];
                     $years = $_GET['years'];
-                    $query = mysqli_query($conn, "SELECT * FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years'");
+                    $query = mysqli_query($conn, "SELECT * FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && status='check out'");
 
                     if(mysqli_num_rows($query) > 0){
             ?>
@@ -91,13 +91,13 @@ $years_start = date('Y') - 10;
                             <td><?=($i['metode_pembayaran'] == 'EDC') ? 'Rp.'. number_format($i['bayar'], 0, ',', '.') : '';?></td>
                         </tr>
                         <?php endforeach;?> 
-                        <?php $query = mysqli_query($conn, "SELECT SUM(total) as total FROM transaksi_kamar");$total = mysqli_fetch_array($query);?>
-                        <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE metode_deposit='cash'");$deposit_cash = mysqli_fetch_array($query);?>
-                        <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE metode_deposit='transfer'");$deposit_tf = mysqli_fetch_array($query);?>
-                        <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE metode_deposit='EDC'");$deposit_edc = mysqli_fetch_array($query);?>
-                        <?php $query = mysqli_query($conn, "SELECT SUM(bayar) as bayar FROM transaksi_kamar WHERE metode_pembayaran='cash'");$bayar_cash = mysqli_fetch_array($query);?>
-                        <?php $query = mysqli_query($conn, "SELECT SUM(bayar) as bayar FROM transaksi_kamar WHERE metode_pembayaran='transfer'");$bayar_tf = mysqli_fetch_array($query);?>
-                        <?php $query = mysqli_query($conn, "SELECT SUM(bayar) as bayar FROM transaksi_kamar WHERE metode_pembayaran='EDC'");$bayar_edc = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(total) as total FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && status='check out'");$total = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_deposit='cash' && status='check out'");$deposit_cash = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_deposit='transfer' && status='check out'");$deposit_tf = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(deposit) as deposit FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_deposit='EDC' && status='check out'");$deposit_edc = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(bayar) as bayar FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_pembayaran='cash' && status='check out'");$bayar_cash = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(bayar) as bayar FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_pembayaran='transfer' && status='check out'");$bayar_tf = mysqli_fetch_array($query);?>
+                        <?php $query = mysqli_query($conn, "SELECT SUM(bayar) as bayar FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && metode_pembayaran='EDC' && status='check out'");$bayar_edc = mysqli_fetch_array($query);?>
                     </tbody>
                     <tfooter>
                         <tr>
