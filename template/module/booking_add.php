@@ -70,6 +70,7 @@ $tamu = mysqli_fetch_array($tamu);
                             <label>Payment Metode</label><br>
                             <input type="radio" class="ml-2" name="metode" value="cash" id="cash"> <label for="cash">Cash</label>
                             <input type="radio" class="ml-4" name="metode" value="transfer" id="tf"> <label for="tf">Trasfer</label>
+                            <input type="radio" class="ml-4" name="metode" value="EDC" id="edc"> <label for="tf">EDC</label>
                         </div>
                     </div>
                 </div>

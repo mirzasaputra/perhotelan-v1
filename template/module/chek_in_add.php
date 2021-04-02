@@ -83,6 +83,7 @@ if(isset($_GET['id_booking'])){
                             <label>Payment Metode</label><br>
                             <input type="radio" class="ml-2" name="metode" <?=(isset($_GET['id_booking']) && $b['metode_pembayaran'] == 'cash') ? 'checked' : '';?> value="cash" id="cash"> <label for="cash">Cash</label>
                             <input type="radio" class="ml-4" name="metode" <?=(isset($_GET['id_booking']) && $b['metode_pembayaran'] == 'transfer') ? 'checked' : '';?> value="transfer" id="tf"> <label for="tf">Trasfer</label>
+                            <input type="radio" class="ml-4" name="metode" <?=(isset($_GET['id_booking']) && $b['metode_pembayaran'] == 'EDC') ? 'checked' : '';?> value="EDC" id="edc"> <label for="edc">EDC</label>
                         </div>
                     </div>
                 </div>

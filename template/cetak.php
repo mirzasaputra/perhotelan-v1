@@ -21,25 +21,48 @@ $monthList = array(
     '12' => 'Desember'
 );
 
-$pdf = new FPDF("P", "cm", "A4");
+if($_GET['cetak'] == 'transaksi_kamar'){
+    $pdf = new FPDF("L", "cm", "A4");
 
-$pdf->setMargins(1, 1, 1);
-$pdf->AliasNbPages();
-$pdf->AddPage();
-$pdf->setFont('times', 'B', 18);
-$pdf->Image('../assets/img/'. $perusahaan['logo'], 1, 1, 2);
-$pdf->multiCell(19, 0.5, $perusahaan['nama_hotel'], 0, 'C');
-$pdf->setFont('times', '', 13);
-$pdf->multiCell(19, 0.8, $perusahaan['nama_perusahaan'], 0, 'C');
-$pdf->setFont('times', '', 11);
-$pdf->multiCell(19, 0.4, 'Alamat : Jl. ' . $perusahaan['jalan'] . ' No. ' . $perusahaan['no_jalan'] . ' ' . $perusahaan['kecamatan']. ', ' . $perusahaan['kabupaten'] . ', ' . $perusahaan['provinsi'], 0, 'C');
-$pdf->multiCell(19, 0.4, 'No. Telp : ' . $perusahaan['no_telp'] . '     No. Fax : ' . $perusahaan['no_fax'], 0, 'C');
-$pdf->multiCell(19, 0.4,  'Website : ' . $perusahaan['website'] . '    Email : ' . $perusahaan['email'], 0, 'C');
-$pdf->line(1, 4, 20, 4);
-$pdf->setLineWidth(0.1);
-$pdf->line(1, 4.1, 20, 4.1);
-$pdf->setLineWidth(0);
-$pdf->ln(1);
+    $pdf->setMargins(1, 1, 1);
+    $pdf->AliasNbPages();
+    $pdf->AddPage();
+    $pdf->setFont('times', 'B', 18);
+    $pdf->Image('../assets/img/'. $perusahaan['logo'], 1, 1, 2);
+    $pdf->multiCell(28.7, 0.5, $perusahaan['nama_hotel'], 0, 'C');
+    $pdf->setFont('times', '', 13);
+    $pdf->multiCell(28.7, 0.8, $perusahaan['nama_perusahaan'], 0, 'C');
+    $pdf->setFont('times', '', 11);
+    $pdf->multiCell(28.7, 0.4, 'Alamat : Jl. ' . $perusahaan['jalan'] . ' No. ' . $perusahaan['no_jalan'] . ' ' . $perusahaan['kecamatan']. ', ' . $perusahaan['kabupaten'] . ', ' . $perusahaan['provinsi'], 0, 'C');
+    $pdf->multiCell(28.7, 0.4, 'No. Telp : ' . $perusahaan['no_telp'] . '     No. Fax : ' . $perusahaan['no_fax'], 0, 'C');
+    $pdf->multiCell(28.7, 0.4,  'Website : ' . $perusahaan['website'] . '    Email : ' . $perusahaan['email'], 0, 'C');
+    $pdf->line(1, 4, 28.7, 4);
+    $pdf->setLineWidth(0.1);
+    $pdf->line(1, 4.1, 28.7, 4.1);
+    $pdf->setLineWidth(0);
+    $pdf->ln(1);    
+} else {
+    $pdf = new FPDF("P", "cm", "A4");
+    
+    $pdf->setMargins(1, 1, 1);
+    $pdf->AliasNbPages();
+    $pdf->AddPage();
+    $pdf->setFont('times', 'B', 18);
+    $pdf->Image('../assets/img/'. $perusahaan['logo'], 1, 1, 2);
+    $pdf->multiCell(19, 0.5, $perusahaan['nama_hotel'], 0, 'C');
+    $pdf->setFont('times', '', 13);
+    $pdf->multiCell(19, 0.8, $perusahaan['nama_perusahaan'], 0, 'C');
+    $pdf->setFont('times', '', 11);
+    $pdf->multiCell(19, 0.4, 'Alamat : Jl. ' . $perusahaan['jalan'] . ' No. ' . $perusahaan['no_jalan'] . ' ' . $perusahaan['kecamatan']. ', ' . $perusahaan['kabupaten'] . ', ' . $perusahaan['provinsi'], 0, 'C');
+    $pdf->multiCell(19, 0.4, 'No. Telp : ' . $perusahaan['no_telp'] . '     No. Fax : ' . $perusahaan['no_fax'], 0, 'C');
+    $pdf->multiCell(19, 0.4,  'Website : ' . $perusahaan['website'] . '    Email : ' . $perusahaan['email'], 0, 'C');
+    $pdf->line(1, 4, 20, 4);
+    $pdf->setLineWidth(0.1);
+    $pdf->line(1, 4.1, 20, 4.1);
+    $pdf->setLineWidth(0);
+    $pdf->ln(1);
+}
+
 if($_GET['cetak'] == 'pesanan') : 
 
     $query = mysqli_query($conn, "SELECT * FROM transaksi_resto");
@@ -146,7 +169,7 @@ if($_GET['cetak'] == 'transaksi_kamar') :
     $years = $_GET['years'];
 
     $pdf->setFont('times', 'B', 14);
-    $pdf->cell(19, 0.3, 'Room Transaction Report', 0, 0, 'C');
+    $pdf->cell(28.7, 0.3, 'Room Transaction Report', 0, 0, 'C');
     $pdf->ln(1.5);
     $pdf->setFont('times', 'B', 10);
     $pdf->cell(10, 0.7, 'Printed on : ' . date('D, d M Y'), 0, 1, 'L');
@@ -154,14 +177,16 @@ if($_GET['cetak'] == 'transaksi_kamar') :
     $pdf->cell(19, 0.7, 'Room transaction report for the month ' . $monthList[$month] . ' ' . $years, 0, 1, 'L');
     $pdf->setX(1);
     $pdf->setFont('arial', 'B', 8);
-    $pdf->cell(.8, 1, 'No.', 1, 0, 'C');
-    $pdf->cell(2.7, 1, 'Date Transaction', 1, 0, 'C');
-    $pdf->cell(3, 1, 'No. Invoice', 1, 0, 'C');
+    $pdf->cell(1, 1, 'No.', 1, 0, 'C');
+    $pdf->cell(4, 1, 'Date Transaction', 1, 0, 'C');
+    $pdf->cell(5, 1, 'No. Invoice', 1, 0, 'C');
     $pdf->cell(2.5, 1, 'Total cost', 1, 0, 'C');
     $pdf->cell(2.5, 1, 'Dp Cash', 1, 0, 'C');
     $pdf->cell(2.5, 1, 'Dp Transfer', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Dp EDC', 1, 0, 'C');
     $pdf->cell(2.5, 1, 'Paid Cash', 1, 0, 'C');
-    $pdf->cell(2.5, 1, 'Paid Transfer', 1, 1, 'C');
+    $pdf->cell(2.5, 1, 'Paid Transfer', 1, 0, 'C');
+    $pdf->cell(2.5, 1, 'Paid EDC', 1, 1, 'C');
 
     $query = mysqli_query($conn, "SELECT * FROM transaksi_kamar WHERE month(tanggal) = '$month' && year(tanggal) = '$years' && status='check out'");
     $no = 1;
@@ -170,32 +195,46 @@ if($_GET['cetak'] == 'transaksi_kamar') :
 
         $pdf->setX(1);
         $pdf->setFont('arial', '', 7);
-        $pdf->cell(.8, 0.85, '  ' . $no++ . '.', 1, 0, 'L');
-        $pdf->cell(2.7, 0.85, '  ' . $i['tanggal'], 1, 0, 'L');
-        $pdf->cell(3, 0.85, '  ' . $i['no_invoice'], 1, 0, 'L');
+        $pdf->cell(1, 0.85, '  ' . $no++ . '.', 1, 0, 'L');
+        $pdf->cell(4, 0.85, '  ' . $i['tanggal'], 1, 0, 'L');
+        $pdf->cell(5, 0.85, '  ' . $i['no_invoice'], 1, 0, 'L');
         $pdf->cell(2.5, 0.85, ' Rp.' . number_format($i['total'], 0, ',', '.'), 1, 0, 'L');
         $pdf->cell(2.5, 0.85, ($i['metode_deposit'] == 'cash') ? ' Rp.' . number_format($i['deposit'], 0, ',', '.') : '', 1, 0, 'L');
         $pdf->cell(2.5, 0.85, ($i['metode_deposit'] == 'transfer') ? ' Rp.' . number_format($i['deposit'], 0, ',', '.') : '', 1, 0, 'L');
+        $pdf->cell(2.5, 0.85, ($i['metode_deposit'] == 'EDC') ? ' Rp.' . number_format($i['deposit'], 0, ',', '.') : '', 1, 0, 'L');
         $pdf->cell(2.5, 0.85, ($i['metode_pembayaran'] == 'cash') ? ' Rp.' . number_format($i['bayar'], 0, ',', '.') : '', 1, 0, 'L');
-        $pdf->cell(2.5, 0.85, ($i['metode_pembayaran'] == 'transfer') ? ' Rp.' . number_format($i['bayar'], 0, ',', '.') : '', 1, 1, 'L');
+        $pdf->cell(2.5, 0.85, ($i['metode_pembayaran'] == 'transfer') ? ' Rp.' . number_format($i['bayar'], 0, ',', '.') : '', 1, 0, 'L');
+        $pdf->cell(2.5, 0.85, ($i['metode_pembayaran'] == 'EDC') ? ' Rp.' . number_format($i['bayar'], 0, ',', '.') : '', 1, 1, 'L');
 
     endforeach;
 
     
     $pdf->setX(1);
     $pdf->setFont('arial', 'B', 8);
-    $pdf->cell(3.5, 1, '', 0, 0, 'L');
-    $pdf->cell(3, 1, '  Total Income', 1, 0, 'L');
+    $pdf->cell(5, 1, '', 0, 0, 'L');
+    $pdf->cell(5, 1, '  Total Income', 1, 0, 'L');
     $query = mysqli_query($conn, "SELECT SUM(total) as total FROM transaksi_kamar");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
     $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE metode_deposit='cash'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
     $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE metode_deposit='transfer'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
+    $query = mysqli_query($conn, "SELECT SUM(deposit) as total FROM transaksi_kamar WHERE metode_deposit='EDC'");$total = mysqli_fetch_array($query);
+    $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
     $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE metode_pembayaran='cash'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
     $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE metode_pembayaran='transfer'");$total = mysqli_fetch_array($query);
+    $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 0, 'L');
+    $query = mysqli_query($conn, "SELECT SUM(bayar) as total FROM transaksi_kamar WHERE metode_pembayaran='EDC'");$total = mysqli_fetch_array($query);
     $pdf->cell(2.5, 1, '  Rp. ' . number_format($total['total'], 0, ',', '.'), 1, 1, 'L');
+
+    $user = $_SESSION['user'];
+    $pass = $_SESSION['pass'];
+    $dataUser = mysqli_query($conn, "SELECT * FROM user WHERE username='$user' && password='$pass'");
+    $dataUser = mysqli_fetch_array($dataUser);
+    
+    $pdf->cell(5, 2, 'Prepared By', 0, 1, 'C');
+    $pdf->cell(5, 2, '('. $dataUser['nama_user'] .')', 0, 1, 'C');
 
 endif;
 
@@ -570,7 +609,7 @@ if($_GET['cetak'] == 'invoice') :
     $pdf->cell(5, 2, '('. $dataUser['nama_user'] .')', 0, 1, 'C');
 endif;
 
-if($_GET['cetak'] !== 'invoice'){
+if($_GET['cetak'] !== 'invoice' && $_GET['cetak'] !== 'transaksi_kamar'){
     $user = $_SESSION['user'];
     $pass = $_SESSION['pass'];
     $dataUser = mysqli_query($conn, "SELECT * FROM user WHERE username='$user' && password='$pass'");
@@ -580,5 +619,7 @@ if($_GET['cetak'] !== 'invoice'){
     $pdf->cell(5, 2, 'Prepared By', 0, 1, 'C');
     $pdf->cell(5, 2, '('. $dataUser['nama_user'] .')', 0, 1, 'C');
 }
+
+
 
 $pdf->Output("Laporan.pdf", "I");

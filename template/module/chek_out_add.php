@@ -207,7 +207,7 @@ if($qty == 0){
                         </tr>
                         <tr align="center">
                             <th>Payment Metode</th>
-                            <th><?=($i['bayar'] > 0) ? ucwords($i['metode_pembayaran']) : '<input type="radio" name="metode" id="cash" value="cash"> <label for="cash">Cash</label> <i class="ml-3"></i> <input type="radio" name="metode" id="tf" value="transfer"> <label for="tf">Transfer</label>'; ?></th>
+                            <th><?=($i['bayar'] > 0) ? ucwords($i['metode_pembayaran']) : '<input type="radio" name="metode" id="cash" value="cash"> <label for="cash">Cash</label> <i class="ml-3"></i> <input type="radio" name="metode" id="tf" value="transfer"> <label for="tf">Transfer</label> <i class="ml-3"></i> <input type="radio" name="metode" id="edc" value="EDC"> <label for="edc">EDC</label>'; ?></th>
                         </tr>
                         <tr align="center">
                             <th>Pay</th>
