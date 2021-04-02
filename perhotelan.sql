@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 27, 2021 at 12:22 PM
+-- Generation Time: Apr 02, 2021 at 05:56 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.3.22
 
@@ -35,6 +35,8 @@ CREATE TABLE `booking` (
   `waktu_check_in` varchar(12) NOT NULL,
   `tgl_checkout` date NOT NULL,
   `waktu_checkout` varchar(12) NOT NULL,
+  `deposit` varchar(15) NOT NULL,
+  `metode_pembayaran` varchar(20) NOT NULL,
   `status` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -42,8 +44,9 @@ CREATE TABLE `booking` (
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`id_booking`, `id_tamu`, `tgl_booking`, `tgl_check_in`, `waktu_check_in`, `tgl_checkout`, `waktu_checkout`, `status`) VALUES
-('ID478440', 'ID27538', '2021-03-27', '2021-03-29', '12:00', '2021-03-31', '12:00', 0);
+INSERT INTO `booking` (`id_booking`, `id_tamu`, `tgl_booking`, `tgl_check_in`, `waktu_check_in`, `tgl_checkout`, `waktu_checkout`, `deposit`, `metode_pembayaran`, `status`) VALUES
+('ID478440', 'ID27538', '2021-03-27', '2021-03-29', '12:00', '2021-03-31', '12:00', '', '', 0),
+('ID7149159', 'ID27538', '2021-04-02', '2021-04-04', '12:00', '2021-04-05', '12:00', '500000', 'cash', 1);
 
 -- --------------------------------------------------------
 
@@ -64,7 +67,8 @@ CREATE TABLE `booking_detail` (
 --
 
 INSERT INTO `booking_detail` (`id_booking_detail`, `id_booking`, `id_kamar`, `jumlah_dewasa`, `jumlah_anak`) VALUES
-(4, 'ID478440', 2, 2, 1);
+(4, 'ID478440', 2, 2, 1),
+(5, 'ID7149159', 3, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -651,7 +655,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `booking_detail`
 --
 ALTER TABLE `booking_detail`
-  MODIFY `id_booking_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_booking_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `fasilitas`

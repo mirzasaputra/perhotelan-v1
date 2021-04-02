@@ -76,13 +76,13 @@ if(isset($_GET['id_booking'])){
                         </div>
                         <div class="form-group">
                             <label>Down Payment</label>
-                            <input type="text" class="form-control" name="deposit" placeholder="Jumlah Deposit" required>
+                            <input type="text" class="form-control" name="deposit" placeholder="Jumlah Deposit" <?=(isset($_GET['id_booking']) ? 'value="'. $b['deposit'] .'"' : '');?> required>
                             <i class="ml-2 text-muted small">*Enter numbers without periods(.). Exp : 90000</i>
                         </div>
                         <div class="form-group">
                             <label>Payment Metode</label><br>
-                            <input type="radio" class="ml-2" name="metode" value="cash" id="cash"> <label for="cash">Cash</label>
-                            <input type="radio" class="ml-4" name="metode" value="transfer" id="tf"> <label for="tf">Trasfer</label>
+                            <input type="radio" class="ml-2" name="metode" <?=(isset($_GET['id_booking']) && $b['metode_pembayaran'] == 'cash') ? 'checked' : '';?> value="cash" id="cash"> <label for="cash">Cash</label>
+                            <input type="radio" class="ml-4" name="metode" <?=(isset($_GET['id_booking']) && $b['metode_pembayaran'] == 'transfer') ? 'checked' : '';?> value="transfer" id="tf"> <label for="tf">Trasfer</label>
                         </div>
                     </div>
                 </div>

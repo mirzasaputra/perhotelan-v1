@@ -13,10 +13,12 @@ $tgl_check_in = $_POST['tgl_chek_in'];
 $waktu_check_in = $_POST['waktu_chek_in'];
 $tgl_check_out = $_POST['tgl_chek_out'];
 $waktu_check_out = $_POST['waktu_chek_out'];
+$deposit = $_POST['deposit'];
+$metode = $_POST['metode'];
 $status = 1;
 
 //save
-$query = mysqli_query($conn, "INSERT INTO booking VALUES('$id', '$id_tamu', '$tgl', '$tgl_check_in', '$waktu_check_in', '$tgl_check_out', '$waktu_check_out', '$status')");
+$query = mysqli_query($conn, "INSERT INTO booking VALUES('$id', '$id_tamu', '$tgl', '$tgl_check_in', '$waktu_check_in', '$tgl_check_out', '$waktu_check_out', '$deposit', '$metode', '$status')");
 
 if($query){
     $data['hasil'] = true;
