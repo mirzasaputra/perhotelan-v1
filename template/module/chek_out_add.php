@@ -186,7 +186,7 @@ if($qty == 0){
                             </th>
                         </tr>
                         <tr align="center">
-                            <th>21% Tax + Service</th>
+                            <th><input type="checkbox" class="mr-3" id="checkTaxService" checked> <label for="checkTaxService" class="strike-through">21% Tax + Service</label></th>
                             <th id="taxService">Rp. <?=number_format($total * 0.21, 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$total * 0.21;?>" id="taxServiceVal">
                         </tr>
@@ -398,4 +398,24 @@ if($qty == 0){
         $('.grandTotal').html('Rp. '+ rupiah(total));
         $('#grandTotal').val(total);
     }
+
+    $('#checkTaxService').click(function(){
+        var checkTaxService = $('#checkTaxService:checked').length;
+    
+        if(checkTaxService == 0){
+            $('#taxServiceVal').val(0);
+            $('#taxService').html('Rp. 0');
+            $('.strike-through').addClass('on');
+            diskon();
+        } else {
+            var subtotal = $('#subtotal').val(), total;
+
+            total = parseInt(subtotal) * 0.21;
+
+            $('.strike-through').removeClass('on');
+            $('#taxServiceVal').val(total);
+            $('#taxService').html('Rp. '+ rupiah(total));
+            diskon();
+        }
+    })
 </script>

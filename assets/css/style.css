@@ -322,3 +322,8 @@ li.nav-item.dropdown:hover a.toggle {
         width: 250px;
     }
 }
+
+.strike-through.on {
+    text-decoration: line-through;
+    color:rgba(0, 0, 0, .6)
+}
