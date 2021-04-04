@@ -224,7 +224,7 @@ if($qty == 0){
 
                 <div class="form-group">
                     <a href="?module=chek_in" class="btn btn-danger">Cancel</a>
-                    <a href="template/cetak.php?cetak=invoice&id=<?=$id;?>" target="_blank" class="btn btn-warning"><i class="fas fa-print"></i> <?=($i['bayar'] > 0) ? 'Print Bukti Pembayaran' : 'Print Invoice'; ?></a>
+                    <a href="" id="cetakinvoice" target="_blank" class="btn btn-warning"><i class="fas fa-print"></i> <?=($i['bayar'] > 0) ? 'Print Bukti Pembayaran' : 'Print Invoice'; ?></a>
                     <?=($i['bayar'] > 0) ? '<a href="?dashboard" class="btn btn-success" type="submit"><i class="fas fa-check pr-1"></i> Selesai</a>' : '<button class="btn btn-primary" type="submit"><i class="fas fa-key pr-1"></i> Chek Out</button>'; ?>
                 </div>
             </form>
@@ -404,6 +404,8 @@ if($qty == 0){
         $('#grandTotal').val(total);
     }
 
+    $('#cetakinvoice').attr('href', 'template/cetak.php?cetak=invoice&id=<?=$id;?>');
+
     $('#checkTaxService').click(function(){
         var checkTaxService = $('#checkTaxService:checked').length;
     
@@ -411,6 +413,7 @@ if($qty == 0){
             $('#taxServiceVal').val(0);
             $('#taxService').html('Rp. 0');
             $('.strike-through').addClass('on');
+            $('#cetakinvoice').attr('href', 'template/cetak.php?cetak=invoice&id=<?=$id;?>');
             diskon();
         } else {
             var subtotal = $('#subtotal').val(), total;
@@ -420,6 +423,7 @@ if($qty == 0){
             $('.strike-through').removeClass('on');
             $('#taxServiceVal').val(total);
             $('#taxService').html('Rp. '+ rupiah(total));
+            $('#cetakinvoice').attr('href', 'template/cetak.php?cetak=invoice&id=<?=$id;?>&taxService');
             diskon();
         }
     })

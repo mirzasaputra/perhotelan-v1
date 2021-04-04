@@ -28,7 +28,7 @@ if($_GET['cetak'] == 'transaksi_kamar'){
     $pdf->AliasNbPages();
     $pdf->AddPage();
     $pdf->setFont('times', 'B', 18);
-    $pdf->Image('../assets/img/'. $perusahaan['logo'], 1, 1, 2);
+    $pdf->Image('../assets/img/'. $perusahaan['logo'], 1, .7, 3);
     $pdf->multiCell(28.7, 0.5, $perusahaan['nama_hotel'], 0, 'C');
     $pdf->setFont('times', '', 13);
     $pdf->multiCell(28.7, 0.8, $perusahaan['nama_perusahaan'], 0, 'C');
@@ -48,7 +48,7 @@ if($_GET['cetak'] == 'transaksi_kamar'){
     $pdf->AliasNbPages();
     $pdf->AddPage();
     $pdf->setFont('times', 'B', 18);
-    $pdf->Image('../assets/img/'. $perusahaan['logo'], 1, 1, 2);
+    $pdf->Image('../assets/img/'. $perusahaan['logo'], 1, .7, 3);
     $pdf->multiCell(19, 0.5, $perusahaan['nama_hotel'], 0, 'C');
     $pdf->setFont('times', '', 13);
     $pdf->multiCell(19, 0.8, $perusahaan['nama_perusahaan'], 0, 'C');
@@ -552,11 +552,11 @@ if($_GET['cetak'] == 'invoice') :
     
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  21% Tax + Service', 1, 0, 'L');
-    $pdf->cell(3, 0.8, '  Rp. ' . number_format($total * 0.21, 0, ',', '.') . ',-', 1, 1, 'L');
+    $pdf->cell(3, 0.8, '  Rp. ' . (isset($_GET['taxService']) ? number_format($total * 0.21, 0, ',', '.') : 0) . ',-', 1, 1, 'L');
     
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(5, 0.8, '  Total', 1, 0, 'L');
-    $pdf->cell(3, 0.8, '  Rp. ' . number_format($total + ($total * 0.21) + $i['surcharge'] - $i['diskon'] , 0, ',', '.') . ',-', 1, 1, 'L');
+    $pdf->cell(3, 0.8, '  Rp. ' . number_format($total + (isset($_GET['taxService']) ? $total * 0.21 : 0) + $i['surcharge'] - $i['diskon'] , 0, ',', '.') . ',-', 1, 1, 'L');
     
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(3, 0.8, '', 0, 0, 'L');
@@ -571,7 +571,7 @@ if($_GET['cetak'] == 'invoice') :
     $pdf->cell(11, 0.8, '', 0, 0, 'L');
     $pdf->cell(3, 0.8, '', 0, 0, 'L');
     $pdf->cell(2, 0.8, '  Grand Total', 1, 0, 'L');
-    $pdf->cell(3, 0.8, '  Rp. ' . number_format((($total + $i['surcharge'] + ($total * 0.21)) - $i['diskon']) - $i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
+    $pdf->cell(3, 0.8, '  Rp. ' . number_format((($total + $i['surcharge'] + (isset($_GET['taxService']) ? $total * 0.21 : 0)) - $i['diskon']) - $i['deposit'], 0, ',', '.') . ',-', 1, 1, 'L');
     
     if($i['bayar']){
         $pdf->cell(11, 0.8, '', 0, 0, 'L');
@@ -587,7 +587,7 @@ if($_GET['cetak'] == 'invoice') :
         $pdf->cell(11, 0.8, '', 0, 0, 'L');
         $pdf->cell(3, 0.8, '', 0, 0, 'L');
         $pdf->cell(2, 0.8, '  Refund', 1, 0, 'L');
-        $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'] - (($total - $i['diskon']) + $i['surcharge'] + ($total * 0.21) - $i['deposit']), 0, ',', '.') . ',-', 1, 1, 'L');
+        $pdf->cell(3, 0.8, '  Rp. ' . number_format($i['bayar'] - (($total - $i['diskon']) + $i['surcharge'] + (isset($_GET['taxService']) ? $total * 0.21 : 0) - $i['deposit']), 0, ',', '.') . ',-', 1, 1, 'L');
     }
 
     $pdf->setY($y + 0.2);
