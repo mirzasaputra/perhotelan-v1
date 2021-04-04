@@ -1,6 +1,6 @@
 <?php
 $id = $_GET['id_transaksi'];
-$query = mysqli_query($conn, "SELECT transaksi_kamar.*, tamu.*, kamar.*, tipe_kamar.*, transaksi_kamar_detail.* FROM transaksi_kamar, tamu, kamar, tipe_kamar, transaksi_kamar_detail WHERE transaksi_kamar.id_transaksi_kamar='$id' && tamu.id_tamu=transaksi_kamar.id_tamu && transaksi_kamar_detail.id_transaksi_kamar=transaksi_kamar.id_transaksi_kamar && kamar.id_kamar=transaksi_kamar_detail.id_kamar && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
+$query = mysqli_query($conn, "SELECT transaksi_kamar.*, transaksi_kamar.status as status_transaksi, tamu.*, kamar.*, tipe_kamar.*, transaksi_kamar_detail.* FROM transaksi_kamar, tamu, kamar, tipe_kamar, transaksi_kamar_detail WHERE transaksi_kamar.id_transaksi_kamar='$id' && tamu.id_tamu=transaksi_kamar.id_tamu && transaksi_kamar_detail.id_transaksi_kamar=transaksi_kamar.id_transaksi_kamar && kamar.id_kamar=transaksi_kamar_detail.id_kamar && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
 $i = mysqli_fetch_array($query);
 
 //meghitung qty
@@ -186,15 +186,15 @@ if($qty == 0){
                             </th>
                         </tr>
                         <tr align="center">
-                            <th><input type="checkbox" class="mr-3" id="checkTaxService" checked> <label for="checkTaxService" class="strike-through">21% Tax + Service</label></th>
-                            <th id="taxService">Rp. <?=number_format($total * 0.21, 0, ',', '.');?></th>
-                            <input type="hidden" value="<?=$total * 0.21;?>" id="taxServiceVal">
+                            <th><input type="checkbox" class="mr-3" id="checkTaxService" <?=(isset($_GET['taxService']) && $_GET['taxService'] == 'checked') ? 'checked' : '';?> <?=isset($_GET['taxService']) && $i['status_transaksi'] == 'check out' ? 'disabled' : '';?> > <label for="checkTaxService" class="strike-through <?=(isset($_GET['taxService']) && $_GET['taxService'] == 'checked') ? '' : 'on';?>">21% Tax + Service</label></th>
+                            <th id="taxService">Rp. <?=(isset($_GET['taxService']) && $_GET['taxService'] == 'checked') ? number_format($total * 0.21, 0, ',', '.') : '0';?></th>
+                            <input type="hidden" value="<?=(isset($_GET['taxService']) && $_GET['taxService'] == 'checked') ? $total * 0.21 : 0;?>" id="taxServiceVal">
                         </tr>
                         <tr align="center">
                             <th>Total</th>
-                            <th id="totalView">Rp. <?=number_format($total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) - $i['diskon'], 0, ',', '.');?></th>
+                            <th id="totalView">Rp. <?=number_format($total + ((isset($_GET['taxService']) && $_GET['taxService'] == 'checked') ? $total * 0.21 : 0) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) - $i['diskon'], 0, ',', '.');?></th>
                             <input type="hidden" value="<?=$i['surcharge'];?>" id="surchargeVal">
-                            <input type="hidden" name="inputTotal" id="inputTotal" value="<?=$total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge']);?>">
+                            <input type="hidden" name="inputTotal" id="inputTotal" value="<?=$total + ((isset($_GET['taxService']) && $_GET['taxService'] == 'checked') ? $total * 0.21 : 0) + (($i['surcharge'] == '') ? 0 : $i['surcharge']);?>">
                         </tr>
                         <tr align="center">
                             <th>Down Payment</th>
@@ -203,7 +203,7 @@ if($qty == 0){
                         </tr>
                         <tr align="center">
                             <th>Grand Total</th>
-                            <th class="grandTotal <?php if(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format((($total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) - $i['diskon']) - $i['deposit'], 0, ',', '.');?></th>
+                            <th class="grandTotal <?php if(($total + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ((isset($_GET['taxService']) && $_GET['taxService'] == 'checked') ? $total * 0.21 : 0) - $i['deposit']) < 0 ){echo 'text-danger';}?>">Rp. <?=number_format((($total + ($total * 0.21) + (($i['surcharge'] == '') ? 0 : $i['surcharge'])) - $i['diskon']) - $i['deposit'], 0, ',', '.');?></th>
                         </tr>
                         <tr align="center">
                             <th>Payment Metode</th>
@@ -211,12 +211,12 @@ if($qty == 0){
                         </tr>
                         <tr align="center">
                             <th>Pay</th>
-                            <input type="hidden" name="total" id="grandTotal" value="<?=(($total + $i['surcharge'] + ($total * 0.21)) - $i['diskon']) - $i['deposit'];?>">
+                            <input type="hidden" name="total" id="grandTotal" value="<?=(($total + $i['surcharge'] + ((isset($_GET['taxService']) && $_GET['taxService'] == 'checked') ? $total * 0.21 : 0)) - $i['diskon']) - $i['deposit'];?>">
                             <th><?=($i['bayar'] > 0) ? 'Rp. '. number_format($i['bayar'], 0, ',', '.') : '<input type="text" name="bayar" id="pay" class="form-control" placeholder="Bayar..." required autocomplete="off">'; ?></th>
                         </tr>
                         <tr align="center">
                             <th>Refund</th>
-                            <th class="text-success" id="refund">Rp. <?=($i['bayar'] > 0) ? $i['bayar'] - (($total - $i['diskon']) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ($total * 0.21) - $i['deposit']) : 'Rp. 0'; ?></th>
+                            <th class="text-success" id="refund">Rp. <?=($i['bayar'] > 0) ? $i['bayar'] - (($total - $i['diskon']) + (($i['surcharge'] == '') ? 0 : $i['surcharge']) + ((isset($_GET['taxService']) && $_GET['taxService'] == 'checked') ? $total * 0.21 : 0) - $i['deposit']) : 'Rp. 0'; ?></th>
                         </tr>
 
                     </table>
@@ -337,6 +337,10 @@ if($qty == 0){
         })
 
         $('#formChekOut').submit(function(e){
+            var taxService = '';
+            if($('#checkTaxService:checked').length > 0){
+                taxService = 'checked';
+            }
             e.preventDefault();
             $.ajax({
                 url: $(this).attr('action'),
@@ -352,7 +356,8 @@ if($qty == 0){
                             icon: 'success',
                             text: data.pesan
                         }).then(function(){
-                            window.location.reload();
+                            var url = window.location.href;
+                            window.location.assign(url +'&&taxService='+ taxService);
                         });
                     }
                     else {
