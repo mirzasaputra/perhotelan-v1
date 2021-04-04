@@ -1,5 +1,5 @@
 <?php
-    $query = mysqli_query($conn, "SELECT transaksi_kamar.*, kamar.*, tipe_kamar.*, transaksi_kamar_detail.* FROM transaksi_kamar, kamar, tipe_kamar, transaksi_kamar_detail WHERE transaksi_kamar_detail.id_transaksi_kamar=transaksi_kamar.id_transaksi_kamar && kamar.id_kamar=transaksi_kamar_detail.id_kamar && kamar.status='terpakai' && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
+    $query = mysqli_query($conn, "SELECT kamar.*, tipe_kamar.* FROM transaksi_kamar, kamar, tipe_kamar, transaksi_kamar_detail WHERE transaksi_kamar_detail.id_transaksi_kamar=transaksi_kamar.id_transaksi_kamar && kamar.status='terpakai' && kamar.id_kamar=transaksi_kamar_detail.id_kamar && transaksi_kamar.status='check in' && tipe_kamar.id_tipe_kamar=kamar.id_tipe_kamar");
 ?>
 <div class="container-fluid">
 
