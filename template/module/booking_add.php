@@ -3,6 +3,11 @@ $id = $_GET['id'];
 $query = mysqli_query($conn, "SELECT * FROM tamu");
 $tamu = mysqli_query($conn, "SELECT * FROM tamu WHERE id_tamu='$id'");
 $tamu = mysqli_fetch_array($tamu);
+if(isset($_GET['edit'])){
+    $id_booking = $_GET['id_booking'];
+    $edit = mysqli_query($conn, "SELECT tamu.*, booking.* FROM booking, tamu WHERE tamu.id_tamu=booking.id_tamu && booking.id_booking='$id_booking'");
+    $data = mysqli_fetch_array($edit);
+}
 ?>
 <div class="container-fluid">
 
@@ -41,11 +46,11 @@ $tamu = mysqli_fetch_array($tamu);
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label>Date / Time Check In</label>
-                                    <input type="date" class="form-control" name="tgl_chek_in" value="<?=$tgl->format('Y-m-d');?>">
+                                    <input type="date" class="form-control" name="tgl_chek_in" value="<?=(isset($data) ? $data['tgl_check_in'] : $tgl->format('Y-m-d'));?>">
                                 </div>
                                 <div class="col-sm-6 pt-2">
                                     <label></label>
-                                    <input type="time" class="form-control" name="waktu_chek_in" value="12:00">
+                                    <input type="time" class="form-control" name="waktu_chek_in" value="<?=(isset($data) ? $data['waktu_check_in'] : '12:00');?>">
                                 </div>
                             </div>
                         </div>
@@ -53,30 +58,30 @@ $tamu = mysqli_fetch_array($tamu);
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label>Date / Time Check Out</label>
-                                    <input type="date" class="form-control" name="tgl_chek_out" required>
+                                    <input type="date" class="form-control" name="tgl_chek_out" value="<?=(isset($data) ? $data['tgl_checkout'] : '');?>" required>
                                 </div>
                                 <div class="col-sm-6 pt-2">
                                     <label></label>
-                                    <input type="time" class="form-control" name="waktu_chek_out" value="12:00" placeholder="Time Chek Out" required>
+                                    <input type="time" class="form-control" name="waktu_chek_out" value="<?=(isset($data) ? $data['waktu_checkout'] : '12:00');?>" placeholder="Time Chek Out" required>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>Down Payment</label>
-                            <input type="text" class="form-control" name="deposit" placeholder="Jumlah Deposit" required>
+                            <input type="text" class="form-control" name="deposit" placeholder="Jumlah Deposit" value="<?=(isset($data) ? $data['deposit'] : '');?>" required>
                             <i class="ml-2 text-muted small">*Enter numbers without periods(.). Exp : 90000</i>
                         </div>
                         <div class="form-group">
                             <label>Payment Metode</label><br>
-                            <input type="radio" class="ml-2" name="metode" value="cash" id="cash"> <label for="cash">Cash</label>
-                            <input type="radio" class="ml-4" name="metode" value="transfer" id="tf"> <label for="tf">Trasfer</label>
-                            <input type="radio" class="ml-4" name="metode" value="EDC" id="edc"> <label for="tf">EDC</label>
+                            <input type="radio" class="ml-2" name="metode" value="cash" <?=(isset($data) && $data['metode_pembayaran'] == 'cash') ? 'checked' : '';?> id="cash"> <label for="cash">Cash</label>
+                            <input type="radio" class="ml-4" name="metode" value="transfer" <?=(isset($data) && $data['metode_pembayaran'] == 'transfer') ? 'checked' : '';?> id="tf"> <label for="tf">Trasfer</label>
+                            <input type="radio" class="ml-4" name="metode" value="EDC" <?=(isset($data) && $data['metode_pembayaran'] == 'EDC') ? 'checked' : '';?> id="edc"> <label for="tf">EDC</label>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <a href="?module=chek_in" class="btn btn-danger">Cancel</a>
-                    <button class="btn btn-primary" type="submit"><i class="fas fa-key pr-1"></i> Chek In</button>
+                    <button class="btn btn-primary" type="submit"><i class="fas fa-key pr-1"></i> Booking</button>
                 </div>
             </form>
         </div>

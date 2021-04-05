@@ -74,9 +74,9 @@ $start2 = ($page2 - 1) * $per_hal;
                   <div class="card-body-icon">
                     <i class="fas fa-fw fa-edit"></i>
                   </div>
-                  <div class="mr-5"><h2>Booking</h2></div>
+                  <div class="mr-5"><h2><?=$booking;?></h2> Booking</div>
                 </div>
-                <a class="card-footer text-white clearfix small z-1" href="?module=booking">
+                <a class="card-footer text-white clearfix small z-1" href="?module=view_booking">
                   <span class="float-left">View Details</span>
                   <span class="float-right">
                     <i class="fas fa-angle-right"></i>

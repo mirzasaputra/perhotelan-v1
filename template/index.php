@@ -2,10 +2,12 @@
 $tersedia = mysqli_query($conn, "SELECT * FROM kamar WHERE status='tersedia'");
 $terpakai = mysqli_query($conn, "SELECT * FROM kamar WHERE status='terpakai'");
 $kotor = mysqli_query($conn, "SELECT * FROM kamar WHERE status='kotor'");
+$booking = mysqli_query($conn, "SELECT * FROM booking WHERE status=1");
 
 $tersedia = mysqli_num_rows($tersedia);
 $terpakai = mysqli_num_rows($terpakai);
 $kotor = mysqli_num_rows($kotor);
+$booking = mysqli_num_rows($booking);
 
 $user = $_SESSION["user"];
 $pass = $_SESSION["pass"];
